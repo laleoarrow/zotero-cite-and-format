@@ -4,9 +4,15 @@
 
 **English** | **[中文](README.md)**
 
-`word-zotero` is a small skill for repairing Word manuscripts that rely on Zotero. It is meant for documents where citation integrity matters more than prose: broken live citations, corrupted bibliographies, style initialization problems, and safe export from a live Zotero source to a static submission file.
+`word-zotero` is a small skill for repairing Word manuscripts that rely on Zotero. It is meant for documents where citation integrity matters more than prose: broken live citations, corrupted bibliographies, style initialization problems, and safe export from a Zotero-editable source document to a static submission file.
 
 The point is not to make a file *look* right. The point is to know whether the document still contains real Zotero fields and whether it can survive another refresh or journal submission step.
+
+By default, it should not export a static submission file immediately. Start with two questions:
+- What is the target journal?
+- Does that journal, or its submission system, explicitly require a static manuscript with field codes removed?
+
+If the journal has not been chosen yet, or if no such requirement has been confirmed, maintain the Zotero-editable source document only.
 
 ## What the Skill Covers
 
@@ -14,7 +20,7 @@ The point is not to make a file *look* right. The point is to know whether the d
 - rebuilding a broken Zotero bibliography
 - checking whether a manuscript is live or already flattened
 - initializing or switching citation styles
-- creating a static submission file from a live Zotero source
+- creating a static submission file from a Zotero-editable source document
 - verifying that the static export did not silently damage the reference list
 
 ## Working Assumption
@@ -41,8 +47,11 @@ That matters because journal-specific rules can override convenient assumptions.
 ## Typical Workflow
 
 ```text
+Ask for the journal
+and whether a static manuscript is required
+                ↓
 Decide what the file should be
-    live source or static submission copy
+    editable source only / or a separate static copy
                 ↓
 Inspect the DOCX package
     document.xml / custom props / customXml
@@ -55,6 +64,24 @@ Export the submission copy
                 ↓
 Verify that the export is actually clean
 ```
+
+## How to Validate the Skill
+
+At the moment this is a documentation-first skill, not a packaged automation tool with bundled scripts. So the right validation target is not "does a test runner pass?" but "does the skill lead the operator to the right decisions and checks?"
+
+The minimum validation standard is:
+
+1. It separates a `Zotero-editable source document` from a `static submission file`.
+2. It points the operator to official Zotero and journal sources before making submission-critical claims.
+3. It catches the failure modes that matter in real manuscripts.
+
+That is why the repo includes a `references/` directory:
+- `references/official-sources.md`
+  - official Zotero KB pages, integration repositories, and journal-instruction examples
+- `references/validation-cases.md`
+  - real failure cases from actual manuscript repair work, including the dropped-reference-1 export bug
+
+If the skill later grows a bundled export or verification script, then a `scripts/` directory and executable tests would make sense. Right now, `references/` is the more useful scaffolding.
 
 ## A Failure Mode Worth Knowing
 
@@ -69,9 +96,20 @@ What you see in Word is usually:
 
 That is not just spacing. It is a damaged export.
 
+## SCI Formatting Hygiene
+
+Unless the target journal says otherwise, a final Word manuscript should keep semantic formatting as real Word formatting rather than as pasted look-alike characters.
+
+In practice, that means:
+- use true superscript formatting for exponents in scientific notation
+- prefer `1.54 × 10` with superscript `-3`, not `1.54 × 10⁻3`
+- use real italics for text that genuinely requires italics
+- do not blindly normalize hyphen, minus, en dash, and em dash into one symbol
+- verify the rendered page, because plain-text extraction may flatten correct superscripts into `10-3`
+
 ## Minimum Checks After Static Export
 
-For any submission file exported from a live Zotero source, verify:
+For any submission file exported from a Zotero-editable source document, verify:
 
 1. `ZOTERO_ITEM = 0`
 2. `ZOTERO_BIBL = 0`
