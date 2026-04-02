@@ -1,10 +1,10 @@
-# word-zotero
+# zotero-cite-and-format
 
-### Word + Zotero Citation Repair
+### Zotero Cite + Format
 
 **English** | **[中文](README.md)**
 
-`word-zotero` is a small skill for repairing Word manuscripts that rely on Zotero. It is meant for documents where citation integrity matters more than prose: broken live citations, corrupted bibliographies, style initialization problems, and safe export from a Zotero-editable source document to a static submission file.
+`zotero-cite-and-format` is a skill for Word manuscripts where citation integrity and journal-facing formatting both matter. Zotero repair is one part of it, not the whole. It covers broken live citations, corrupted bibliographies, style initialization problems, journal-specific formatting cleanup, and safe export from a Zotero-editable source document to a static submission file.
 
 The point is not to make a file *look* right. The point is to know whether the document still contains real Zotero fields and whether it can survive another refresh or journal submission step.
 
@@ -20,6 +20,7 @@ If the journal has not been chosen yet, or if no such requirement has been confi
 - rebuilding a broken Zotero bibliography
 - checking whether a manuscript is live or already flattened
 - initializing or switching citation styles
+- applying journal-directed Word formatting cleanup without damaging semantic formatting or live citations
 - creating a static submission file from a Zotero-editable source document
 - verifying that the static export did not silently damage the reference list
 
@@ -119,11 +120,12 @@ For any submission file exported from a Zotero-editable source document, verify:
 
 ## When to Use It
 
-Use `word-zotero` for requests like:
+Use `zotero-cite-and-format` for requests like:
 - “Zotero no longer recognizes these citations”
 - “Please rebuild this bibliography”
 - “Export a submission-ready Word file from the Zotero version”
 - “Word opens the manuscript, but Zotero refresh is broken”
+- “Adjust this Word file to the target journal's citation and formatting requirements”
 
 Do not use it for ordinary text polishing or generic reference formatting that does not involve live Zotero behavior.
 

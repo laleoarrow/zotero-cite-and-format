@@ -1,8 +1,8 @@
 {
-  "name": "word-zotero",
+  "name": "zotero-cite-and-format",
   "version": "1.0.0",
-  "description": "修复和重建 Word + Zotero live citation 文档，区分静态提交稿与可继续编辑的 Zotero source，并验证 bibliography 可刷新。",
+  "description": "按目标期刊要求处理 Word 手稿中的引文与格式：修复 Zotero 活字段，区分可编辑稿与投稿静态稿，并完成提交前格式核查。",
   "author": "laleoarrow",
-  "keywords": ["word", "zotero", "docx", "citation", "bibliography", "live-fields"],
+  "keywords": ["word", "zotero", "docx", "citation", "bibliography", "formatting", "journal-style", "editable-source", "static-submission"],
   "license": "MIT"
 }

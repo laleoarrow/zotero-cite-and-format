@@ -1,10 +1,10 @@
-# word-zotero
+# zotero-cite-and-format
 
-### Word + Zotero 引文修复
+### Zotero 引文与格式
 
 **[English](README.en.md)** | **中文**
 
-`word-zotero` 处理的是 Word 稿件里真正麻烦的那一层：Zotero 引文还是不是可刷新字段，参考文献还能不能安全刷新，Zotero 可编辑稿怎么稳妥地导出成投稿静态稿。
+`zotero-cite-and-format` 处理的是 Word 手稿里“引文完整性”和“期刊格式要求”同时成立的场景。Zotero 修复只是其中一部分，不是全部。它既处理 Zotero 引文是否还能刷新、参考文献是否还能安全重建，也处理面向目标期刊的 Word 格式细节与投稿静态稿导出。
 
 默认不应该一上来就导出静态稿。先问两个问题：
 - 目标期刊是什么？
@@ -15,6 +15,7 @@
 它适合这几类情况：
 - Zotero 提示现有引文不是活动引文
 - bibliography 损坏、重复，或者一刷新就报错
+- 需要按目标期刊要求调整 Word 手稿格式，但又不能把 Zotero 活字段或语义格式弄坏
 - 需要把稿件分成两份：
   - 一份继续用 Zotero 改
   - 一份提交投稿系统

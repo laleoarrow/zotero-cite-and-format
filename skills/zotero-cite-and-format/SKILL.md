@@ -1,16 +1,16 @@
 ---
-name: word-zotero
-description: Use when Word .docx files with Zotero citations need live-field repair, bibliography regeneration, style initialization, or conversion between static submission files and Zotero-editable source documents.
+name: zotero-cite-and-format
+description: Use when Word .docx manuscripts need journal-specific citation or formatting cleanup, Zotero live-field repair, bibliography regeneration, or controlled export between Zotero-editable source documents and submission-ready static files.
 ---
 
-# Word + Zotero Citation Repair / Word + Zotero 引文修复
+# Zotero Cite + Format / Zotero 引文与格式
 
 ## Overview / 概览
-This skill repairs or rebuilds **real Zotero live citations** in Word `.docx` files. It is for fragile situations where the document must remain Zotero-refreshable, not merely display citation-like text.
+This skill handles **Word manuscript citation and formatting work** when journal requirements, Zotero editability, and submission safety interact. It can repair or rebuild **real Zotero live citations**, preserve or export them appropriately, and fix formatting details that must remain semantically correct in Word rather than only looking correct on screen.
 
 **Final objective:** produce either:
-- a clean **Zotero-editable source document** that can still refresh in Word, or
-- a clean **static submission file** that no longer depends on Zotero.
+- a clean **Zotero-editable source document** that can still refresh in Word and remains suitable for further drafting, or
+- a clean **static submission file** that no longer depends on Zotero and matches the target journal's operational formatting requirements.
 
 Do not confuse the two.
 
@@ -22,6 +22,7 @@ Before asserting a rule about:
 - broken-citation recovery
 - bibliography regeneration
 - field-code visibility
+- scientific-notation or run-level formatting behavior in Word
 - whether a target journal accepts or forbids reference-manager field codes
 
 verify it against official sources first.
@@ -55,6 +56,7 @@ Do not export a static submission file just for ceremony.
 - A user says Zotero refresh fails, bibliography is broken, or Word throws document-preferences errors.
 - A manuscript has static numeric citations but must be converted back to Zotero live citations.
 - A document needs a journal style change and bibliography regeneration while preserving editability.
+- A Word manuscript needs journal-specific formatting cleanup that must not break citation fields or semantic Word formatting.
 - A project needs both a Zotero-editable source and a separate submission-ready static file.
 
 ## Quick Reference / 快速参考
@@ -64,6 +66,7 @@ Do not export a static submission file just for ceremony.
 | User wants to keep editing with Zotero | Rebuild real Word fields and refresh in Word. |
 | Word shows numbers but Zotero cannot detect citations | Treat them as static text until proven otherwise. |
 | First refresh opens a style dialog | Select the correct style once, then rerun refresh. |
+| User asks for formatting-only cleanup | Fix Word run/style formatting without rewriting prose or disturbing Zotero unless required. |
 
 ## Non-Negotiable Rule / 不可协商规则
 Never fake Zotero by inserting plain text that merely looks like a citation.
@@ -249,6 +252,7 @@ This skill is considered working when it consistently routes these cases to the 
 When you finish, report:
 - which file is the Zotero-editable source document
 - which file is the static submission file, if one exists
+- which journal-facing formatting adjustments were made, if any
 - whether refresh completed successfully
 - how many live citation fields and unique Zotero items were verified
 - any remaining user-only blocker, narrowed to a single concrete action
