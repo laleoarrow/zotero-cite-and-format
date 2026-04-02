@@ -8,9 +8,7 @@ description: Use when Word .docx manuscripts need journal-specific citation or f
 ## Overview / 概览
 This skill handles **Word manuscript citation and formatting work** when journal requirements, Zotero editability, and submission safety interact. It can repair or rebuild **real Zotero live citations**, preserve or export them appropriately, and fix formatting details that must remain semantically correct in Word rather than only looking correct on screen.
 
-**Final objective:** produce either:
-- a clean **Zotero-editable source document** that can still refresh in Word and remains suitable for further drafting, or
-- a clean **static submission file** that no longer depends on Zotero and matches the target journal's operational formatting requirements.
+**Final objective:** first produce a clean **Zotero-editable source document** that can still refresh in Word and remains suitable for further drafting. Only after that, and only if the journal or user actually needs it, derive a clean **static submission file** that no longer depends on Zotero and matches the target journal's operational formatting requirements.
 
 Do not confuse the two.
 
@@ -52,6 +50,16 @@ If the user does not yet have a target journal, or if no static-submission requi
 
 Do not export a static submission file just for ceremony.
 
+## Source-First Gate / 先修 Zotero 源稿
+The default workflow is mandatory unless the user explicitly says the file is already a vetted static-only deliverable:
+
+1. repair or confirm the **Zotero-editable source document** first
+2. verify that Word + Zotero refresh works on that source document
+3. treat that verified Zotero version as the canonical manuscript
+4. only then derive a static submission file if the journal or user actually needs one
+
+Do not start from a broken static manuscript and push formatting changes straight into a submission copy while the Zotero source remains unresolved.
+
 ## When to Use / 适用场景
 - A user says Zotero refresh fails, bibliography is broken, or Word throws document-preferences errors.
 - A manuscript has static numeric citations but must be converted back to Zotero live citations.
@@ -62,7 +70,7 @@ Do not export a static submission file just for ceremony.
 ## Quick Reference / 快速参考
 | Situation | Action |
 |---|---|
-| User only needs a final submission file | Keep it static; do not force Zotero back in. |
+| User only needs a final submission file | If a working Zotero source exists, verify that source first and export the static file from it; skip Zotero repair only when the deliverable is truly static-only. |
 | User wants to keep editing with Zotero | Rebuild real Word fields and refresh in Word. |
 | Word shows numbers but Zotero cannot detect citations | Treat them as static text until proven otherwise. |
 | First refresh opens a style dialog | Select the correct style once, then rerun refresh. |
@@ -98,6 +106,10 @@ Default policy:
 - journal not chosen yet -> maintain the Zotero-editable source only
 - journal chosen but static requirement unknown -> check official instructions first
 - static manuscript explicitly required -> export a separate submission copy
+
+Operational rule:
+- the Zotero-editable source document is the canonical working manuscript
+- the static submission file is a derived artifact, not the primary editing target
 
 ## Document Package Inspection / 文档包检查
 Before editing, inspect the DOCX package and verify the following parts:
@@ -145,7 +157,7 @@ If the first refresh opens the Zotero document-preferences dialog:
 Treat this as first-time initialization, not immediate failure.
 
 ## Preferred Repair Procedure / 首选修复流程
-1. Determine whether the target file should be live or static.
+1. Identify or create the Zotero-editable source document that will serve as the canonical manuscript.
 2. Back up the original file before editing.
 3. Inspect package parts and count existing Zotero fields.
 4. If converting static text back to live citations:
@@ -155,11 +167,12 @@ Treat this as first-time initialization, not immediate failure.
    - write valid Zotero document preferences for the intended style
 5. Open the document in Word and run `ZoteroRefresh`.
 6. If needed, use `ZoteroAddEditBibliography` only after style initialization is complete.
-7. Save and close the document.
+7. Save and close the Zotero-editable source document.
 8. Reopen or re-inspect the package to confirm the refresh actually happened.
+9. Only after the source document is verified, decide whether a separate static submission file is required.
 
 ## Static Export Procedure / 静态提交稿导出流程
-When exporting a static submission file from a Zotero-editable source document, do not treat bibliography fields as generic inline fields.
+Only run this procedure after the Zotero-editable source document has already been repaired or verified and confirmed as the canonical manuscript. When exporting a static submission file from that source document, do not treat bibliography fields as generic inline fields.
 
 Use this order:
 1. Duplicate the Zotero-editable source document and export on the copy only.
@@ -215,6 +228,7 @@ If using AppleScript automation:
 ## Verification Checklist / 验证清单
 Before claiming success, verify all of the following:
 
+- the Zotero-editable source document exists and is the canonical manuscript for any later static export
 - the file contains the expected number of `ADDIN ZOTERO_ITEM` fields
 - the bibliography placeholder has been replaced by a rendered bibliography
 - no stale placeholders remain:
@@ -230,9 +244,9 @@ Before claiming success, verify all of the following:
 For realistic coverage checks, compare the current task against the cases in `references/validation-cases.md`.
 
 ## Smoke Test / 烟测
-- "Zotero says these are not active citations anymore." -> inspect package parts first; do not trust the visible numbers
+- "Zotero can no longer recognize or refresh these citations." -> inspect package parts first; do not trust the visible numbers
 - "Please make this Word manuscript refreshable in Zotero again." -> rebuild real citation fields, then refresh in Word
-- "Please export a submission-ready copy for AJO." -> verify journal policy first, then export a separate static file
+- "Please export a submission-ready copy for AJO." -> verify journal policy first, make sure the Zotero source document is working, then export a separate static file
 - "The references now start from 2 after export." -> check the bibliography anchor paragraph before touching spacing
 
 This skill is considered working when it consistently routes these cases to the correct path and the verification checklist can be satisfied on the output files.

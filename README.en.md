@@ -4,7 +4,7 @@
 
 **English** | **[中文](README.md)**
 
-`zotero-cite-and-format` is a skill for Word manuscripts where citation integrity and journal-facing formatting both matter. Zotero repair is one part of it, not the whole. It covers broken live citations, corrupted bibliographies, style initialization problems, journal-specific formatting cleanup, and safe export from a Zotero-editable source document to a static submission file.
+`zotero-cite-and-format` is a skill for Word manuscripts where citation integrity and journal-facing formatting both matter. Zotero repair is one part of it, not the whole. It covers broken live citations, corrupted bibliographies, style initialization problems, journal-specific formatting cleanup, and controlled export from a verified Zotero-editable source document to a static submission file.
 
 The point is not to make a file *look* right. The point is to know whether the document still contains real Zotero fields and whether it can survive another refresh or journal submission step.
 
@@ -13,6 +13,11 @@ By default, it should not export a static submission file immediately. Start wit
 - Does that journal, or its submission system, explicitly require a static manuscript with field codes removed?
 
 If the journal has not been chosen yet, or if no such requirement has been confirmed, maintain the Zotero-editable source document only.
+
+The intended order is strict:
+1. repair or confirm the Zotero-editable source document first
+2. treat that source document as the canonical manuscript
+3. derive a static submission file from that source only if it is actually needed
 
 ## What the Skill Covers
 
@@ -52,7 +57,7 @@ Ask for the journal
 and whether a static manuscript is required
                 ↓
 Decide what the file should be
-    editable source only / or a separate static copy
+    verified editable source first / then a separate static copy if needed
                 ↓
 Inspect the DOCX package
     document.xml / custom props / customXml
@@ -61,7 +66,7 @@ Repair citations or bibliography if needed
                 ↓
 Refresh in Word with Zotero
                 ↓
-Export the submission copy
+Export the submission copy from the verified Zotero source
                 ↓
 Verify that the export is actually clean
 ```
@@ -121,7 +126,7 @@ For any submission file exported from a Zotero-editable source document, verify:
 ## When to Use It
 
 Use `zotero-cite-and-format` for requests like:
-- “Zotero no longer recognizes these citations”
+- “Zotero can no longer recognize, edit, or refresh these citations”
 - “Please rebuild this bibliography”
 - “Export a submission-ready Word file from the Zotero version”
 - “Word opens the manuscript, but Zotero refresh is broken”
