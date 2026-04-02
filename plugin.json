@@ -1,0 +1,8 @@
+{
+  "name": "word-zotero",
+  "version": "1.0.0",
+  "description": "修复和重建 Word + Zotero live citation 文档，区分静态提交稿与可继续编辑的 Zotero source，并验证 bibliography 可刷新。",
+  "author": "laleoarrow",
+  "keywords": ["word", "zotero", "docx", "citation", "bibliography", "live-fields"],
+  "license": "MIT"
+}
