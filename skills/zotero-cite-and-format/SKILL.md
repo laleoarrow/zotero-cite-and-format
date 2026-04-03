@@ -90,10 +90,17 @@ Rules:
 - Do not leave literal function calls, wrapper names, argument strings, or code-style tokens in the abstract, Results, Discussion, or Conclusions unless the target journal explicitly requires them.
 - Treat "no code-tone in manuscript narrative" as an explicit default rule, not a stylistic preference. Journal-facing prose should not read like pasted scripts, package calls, or pipeline logs.
 - In Methods, translate implementation into what the analysis did and why it matters. Thresholds, models, endpoint identifiers, software names, and selected identifiers such as dataset codes or outcome labels may remain only when they materially clarify the methodological operation, reproducibility, or source mapping. Raw function calls, `package::function` syntax, argument strings, authentication details, workspace paths, and command fragments should not remain in the main text when a prose translation would convey the method just as well.
+- Internal endpoint codes, portal-specific variable names, or study-export labels that do not help an informed reader understand the method should be moved out of the main narrative and, if still needed, into a supplement, note, or reproducibility artifact.
 - Avoid monospace/code formatting in running manuscript prose for package names, file paths, function names, or parameter settings unless the target journal explicitly requires it in the main text. If the user wants reproducibility-heavy detail, place that notation in an appendix, supplement, or separate methods artifact rather than in the main narrative by default.
 - If a literal identifier must remain, make the surrounding sentence explain the methodological meaning rather than presenting the identifier as if the function name itself were the method.
 - Even in Methods, do not let code-like details create visibly different typography from the surrounding text unless the journal explicitly requires a distinct format for such material.
 - When target-journal guidance is silent, default to the journal's conventional published prose style rather than to implementation-level notation.
+
+Examples:
+- Bad abstract/methods carryover: "variants were harmonized with `harmonise_data(action = 2)`"
+- Better manuscript prose: "variants underwent allele-frequency-aware strand harmonization, retaining resolvable palindromic variants and excluding unresolved ambiguities"
+- Bad workflow wording: "instruments were extracted using JWT-authenticated queries"
+- Better manuscript prose: "instruments were obtained through the OpenGWAS interface"
 
 ## Output Naming Policy / 输出命名规则
 The user-facing manuscript outputs should be named by one stable stem only.
@@ -328,12 +335,9 @@ If using AppleScript automation:
 - if a modal dialog appears and automation cannot click it, narrow the blocker and ask the user for that one click
 
 ## Verification Checklist / 验证清单
-Before claiming success, verify all of the following:
+Before claiming success, verify all applicable items for the chosen workflow path:
 
-- the Zotero-editable source document exists and is the canonical manuscript for any later static export
 - the edited `.docx` still opens normally in Word and does not trigger document-repair symptoms attributable to the edit
-- `docProps/custom.xml` contains the intended Zotero style id and document-preference payload
-- the file contains the expected number of `ADDIN ZOTERO_ITEM` fields, but field counts are not treated as sufficient proof
 - the bibliography placeholder has been replaced by a rendered bibliography
 - no stale placeholders remain:
   - `{Citation}`
@@ -341,14 +345,24 @@ Before claiming success, verify all of the following:
   - duplicated old reference lists
 - no previously existing non-target content was accidentally deleted, truncated, or reordered
 - headings, body paragraphs, tables, figure legends, and other untouched manuscript regions still match the pre-edit document except for explicitly requested changes
-- rendered citations and bibliography text change as expected after refresh
+- any retained code-adjacent identifier in Methods still uses the same body-text typography as the surrounding paragraph rather than monospace, backticks, or visually mismatched styling
 - verification is based on Word-visible output or a rendered export, not only XML inspection or field counts
-- macro/process success messages alone are not accepted as evidence that refresh happened
 - scientific-notation exponents, if present, use true Word superscript formatting rather than pasted Unicode superscript glyphs
 - the Zotero-editable source document and any static submission copy have no unintended body-text drift
 - the regenerated bibliography count matches the intended unique references
 - any style-driven renumbering is explained to the user
 - any journal-specific submission rule that matters for the chosen output file has been checked against official author instructions
+
+If a Zotero-editable source document is in scope, also verify:
+- the Zotero-editable source document exists and is the canonical manuscript for any later static export
+- `docProps/custom.xml` contains the intended Zotero style id and document-preference payload
+- the file contains the expected number of `ADDIN ZOTERO_ITEM` fields, but field counts are not treated as sufficient proof
+- rendered citations and bibliography text change as expected after refresh
+- macro/process success messages alone are not accepted as evidence that refresh happened
+
+If the task is the explicit vetted static-only exception, also verify:
+- the completion report explicitly states that no Zotero-editable source document was requested or maintained in scope
+- the static submission file satisfies the separate submission-file verification checklist for rendered references, body-text integrity, and field-removal status where applicable
 
 For realistic coverage checks, compare the current task against the cases in `references/validation-cases.md`.
 
