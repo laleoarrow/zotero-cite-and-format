@@ -62,6 +62,17 @@ If the user does not yet have a target journal, or if no static-submission requi
 
 Do not export a static submission file just for ceremony.
 
+Journal-policy response rule:
+- If the user has named a target journal, you must explicitly tell the user which of the following is supported by official sources:
+  - the journal **requires** a static submission manuscript
+  - the journal **recommends** a static submission manuscript
+  - no explicit requirement or recommendation was found in the official instructions checked
+- Do not leave this implicit.
+- If the official instructions are silent or ambiguous, say so explicitly and report the date checked plus the official sources consulted.
+- For the operational decision of whether to generate a static submission manuscript, treat the **target journal and its submission system** as the authority.
+- If the target journal or submission system does **not explicitly require or recommend** a static submission manuscript, do **not** generate one by default.
+- General Zotero guidance about unlinking citations before submission may be reported as background, but it does not by itself justify generating `name.docx` when the journal is silent.
+
 ## Source-First Gate / 先修 Zotero 源稿
 The default workflow is mandatory unless the user explicitly says the file is already a vetted static-only deliverable:
 
@@ -89,18 +100,32 @@ Rules:
 - Override order for manuscript prose is: target-journal requirement first, then explicit user instruction for the current manuscript scope, then the default anti-code-tone rule. Neither journal silence nor generic reproducibility preference is enough to justify code-style narrative in abstract, Results, Discussion, or Conclusions.
 - Do not leave literal function calls, wrapper names, argument strings, or code-style tokens in the abstract, Results, Discussion, or Conclusions unless the target journal explicitly requires them.
 - Treat "no code-tone in manuscript narrative" as an explicit default rule, not a stylistic preference. Journal-facing prose should not read like pasted scripts, package calls, or pipeline logs.
+- Respect section role as well as sentence style. Introduction paragraphs should usually frame background, prior-literature gap, rationale, and aim; they may discuss limitations of previous studies when that defines the gap, but they should not open by defending limitations of the current study, nested-dataset dependence, or replication caveats unless the target journal explicitly requires that structure.
+- Do not introduce unsupported field-wide generalizations into journal-facing prose, such as claims about how large public resources are "often" used, unless the statement is backed by a source and materially needed. When support is absent, rewrite the sentence as a concrete scientific gap or study rationale.
+- Do not enforce numeric parity between Introduction and Discussion citations as a manuscript-quality rule. Mainstream guidance evaluates whether citations are balanced, relevant, and useful for the role of each section, not whether the raw counts are similar.
 - In Methods, translate implementation into what the analysis did and why it matters. Thresholds, models, endpoint identifiers, software names, and selected identifiers such as dataset codes or outcome labels may remain only when they materially clarify the methodological operation, reproducibility, or source mapping. Raw function calls, `package::function` syntax, argument strings, authentication details, workspace paths, and command fragments should not remain in the main text when a prose translation would convey the method just as well.
+- Do not let a Methods cleanup create a catch-all bucket such as "Software, Reporting, and Ethics" unless the target journal explicitly prefers that structure. Put ethics and reporting scope in Study Design or the relevant data-source subsection, and place software details near the analytic step they support.
+- If non-independence, nested-cohort dependence, or hierarchy rules must be introduced before Methods, compress them into brief study-rationale language and reserve the full caveat or defense for Methods or Discussion.
 - Internal endpoint codes, portal-specific variable names, or study-export labels that do not help an informed reader understand the method should be moved out of the main narrative and, if still needed, into a supplement, note, or reproducibility artifact.
 - Avoid monospace/code formatting in running manuscript prose for package names, file paths, function names, or parameter settings unless the target journal explicitly requires it in the main text. If the user wants reproducibility-heavy detail, place that notation in an appendix, supplement, or separate methods artifact rather than in the main narrative by default.
 - If a literal identifier must remain, make the surrounding sentence explain the methodological meaning rather than presenting the identifier as if the function name itself were the method.
 - Even in Methods, do not let code-like details create visibly different typography from the surrounding text unless the journal explicitly requires a distinct format for such material.
 - When target-journal guidance is silent, default to the journal's conventional published prose style rather than to implementation-level notation.
+- Citation-balance heuristic: the Introduction should cite enough key background and gap-defining studies without turning into a literature review, whereas the Discussion should cite enough prior work to compare findings, explain agreement or disagreement, and place the results in context. If Discussion is interpretive but sparsely cited, add targeted comparison citations; if Introduction is over-cited, trim or move synthesis rather than padding Discussion just to match counts.
 
 Examples:
 - Bad abstract/methods carryover: "variants were harmonized with `harmonise_data(action = 2)`"
 - Better manuscript prose: "variants underwent allele-frequency-aware strand harmonization, retaining resolvable palindromic variants and excluding unresolved ambiguities"
 - Bad workflow wording: "instruments were extracted using JWT-authenticated queries"
 - Better manuscript prose: "instruments were obtained through the OpenGWAS interface"
+- Bad Introduction carryover: "However, the earlier 120k release is nested within the later 500k release, so cross-release concordance cannot be interpreted as independent replication."
+- Better Introduction-level rationale: "We therefore used a prespecified hierarchical triangulation framework to distinguish the primary observational layer from supporting analyses."
+- Bad unsupported gap claim: "Large public metabolomics resources are often used descriptively rather than within a prespecified triangulation framework."
+- Better evidence-grounded gap: "Existing observational and genetic findings do not yet show which metabolite signals remain prioritized when causal inference and age-stratified population support are considered together."
+- Bad mixed-bucket heading: "## Software, Reporting, and Ethics"
+- Better Methods placement: put ethics and reporting scope in Study Design, and place software details in the analytic subsection that used them.
+- Bad citation-ratio heuristic: "Discussion should have about the same number of citations as the Introduction."
+- Better section-role heuristic: "Introduction and Discussion should each have the citations needed for their own job; add or trim references based on background-vs-interpretation needs, not to equalize raw counts."
 
 ## Output Naming Policy / 输出命名规则
 The user-facing manuscript outputs should be named by one stable stem only.
@@ -113,7 +138,9 @@ Rules:
 - Do not create additional user-facing DOCX variants such as `name_revised.docx`, `name_submission_static.docx`, `name_final.docx`, or `name_v2.docx`.
 - Internal backups, rebuild checkpoints, and scratch DOCX files belong outside the deliverable folder, for example under `agents/` or another process-artifact location.
 - If the journal does not explicitly require or recommend a static submission file, or if the user explicitly prefers Zotero-only output, generate only `name_zotero.docx`.
+- Do not let general reference-manager advice override a silent journal. If the journal and submission system do not explicitly require or recommend a static submission file, keep only `name_zotero.docx`.
 - Rare exception: if the task is explicitly a vetted static-only deliverable and no Zotero-editable source is requested or in scope, the final deliverable may be `name.docx` only. State that exception explicitly when reporting completion.
+- Do not leave a second live Zotero manuscript under another user-facing name or in another deliverable directory. If an internal checkpoint is needed during rebuild, keep it under `agents/` or a temporary path and report only the final `name_zotero.docx`.
 
 ## When to Use / 适用场景
 - A user says Zotero refresh fails, bibliography is broken, or Word throws document-preferences errors.
@@ -134,10 +161,19 @@ Rules:
 | Word manuscript will remain Zotero-editable | Store citations as `Fields` unless real Word/LibreOffice interoperability requires `Bookmarks`. |
 | User needs a static submission copy | Duplicate the verified `name_zotero.docx` source and create `name.docx` on the copy only. |
 | User asks for formatting-only cleanup | Fix Word run/style formatting without rewriting prose or disturbing Zotero unless required. If code-like narrative is already present, limit formatting-only work to typographic cleanup unless the user widens scope to manuscript editing. |
+| A second live DOCX appears during rebuild | Keep only `name_zotero.docx` as the user-facing live manuscript; move internal checkpoints to `agents/` or a temporary path and do not leave a duplicate live deliverable. |
+| Cited items exist in Zotero but lack attachment or link children | Add or import a PDF/link child automatically when possible; if automatic attachment fails, ask the user for the missing source before claiming the workflow is complete. |
 | DOCX shows gray square brackets around headings or paragraph ends | Suspect pandoc/bookmark display artifacts first; inspect `w:bookmarkStart` / `w:bookmarkEnd` and remove nonessential bookmarks from the submission copy. |
 | First page repeats the manuscript title | Treat duplicated title blocks as a document-template problem, not a journal requirement, unless the target journal explicitly requires both a manuscript title and a separate title-page title line in the same file. |
 | Data Availability reads like citation-only prose but the journal usually shows direct links | Verify the journal's published style or author instructions; if no contrary rule is found, prefer human-readable resource names plus explicit URLs in the submission copy. |
 | Methods prose contains code calls such as `foo(arg = 1)` | Replace the implementation syntax with journal-style methodological prose unless the target journal explicitly requires software-notation detail in the main text. Endpoint IDs or model labels may stay when they aid source mapping, but they should remain typographically consistent with the surrounding prose. |
+| Introduction opens with current-study non-independence caveats or defensive hierarchy language | Keep prior-study limitations in the Introduction if they define the gap, but move the full caveat about the current study to Methods or Discussion and keep only concise study-rationale wording in the Introduction unless the journal explicitly wants the caveat there. |
+| Introduction contains an unsupported sentence about what researchers usually do with a public resource | Remove the sociology-of-the-field claim unless it is sourced; restate the gap in terms of unanswered scientific or analytical questions. |
+| User asks whether Discussion citations should roughly equal Introduction citations | Do not enforce count matching. Check whether the Introduction is balanced and non-review-like, and whether the Discussion has enough citations to compare findings with prior studies and support interpretive claims. |
+| Methods ends with a leftover `Software, Reporting, and Ethics` bucket | Redistribute ethics/reporting language to Study Design or the relevant source subsection and move software names to the analytic sections that used them, unless the journal explicitly requires a separate heading. |
+| STROBE-MR covers only one component of a mixed-design paper | State that the MR component was reported with reference to STROBE-MR where applicable; do not imply that the whole paper fully conforms to the checklist if that is not true. |
+| Word manuscript contains markdown-style superscript such as `10^-6^` | Replace it with true Word run-level superscript formatting before treating the file as manuscript-ready. |
+| Data Availability says "current workspace", local file paths, or agent-process narration | Rewrite it into manuscript-ready repository or availability language; do not leak local workflow narration into a journal-facing document. |
 
 ## Non-Negotiable Rule / 不可协商规则
 Never fake Zotero by inserting plain text that merely looks like a citation.
@@ -174,9 +210,18 @@ If the user needs both, maintain two files explicitly.
 
 Default policy:
 - journal not chosen yet -> maintain only `name_zotero.docx`
-- journal chosen but static requirement unknown -> check official instructions first, and still default to `name_zotero.docx` only until a static need is confirmed
+- journal chosen but static requirement unknown -> check official instructions first, and still default to `name_zotero.docx` only until a static need is explicitly confirmed by the journal or submission system
 - static manuscript explicitly required or recommended -> export `name.docx` in addition to `name_zotero.docx`
 - user explicitly wants Zotero-only output -> maintain only `name_zotero.docx`
+
+Interpretation rule:
+- target journal or submission system explicitly requires or recommends static manuscript -> generate `name.docx`
+- target journal or submission system does not explicitly require or recommend static manuscript -> do **not** generate `name.docx`
+- do not elevate general Zotero submission advice into a journal requirement
+
+Communication rule:
+- when a target journal is known, completion reports must explicitly say whether that journal requires, recommends, or does not explicitly mention a static submission copy
+- if no explicit journal rule was found, state that the working policy is **not to generate a static manuscript** and to keep only the Zotero-editable source document until journal-side evidence says otherwise
 
 Operational rule:
 - the Zotero-editable source document is the canonical working manuscript
@@ -186,6 +231,7 @@ Operational rule:
   - one file: `name_zotero.docx`
   - or two files: `name_zotero.docx` plus `name.docx`
   - or, only for an explicit vetted static-only exception, one file: `name.docx`
+- if no static file is in scope, do not leave any second live manuscript in `manuscript/`, `output/`, or another deliverable directory
 
 ## Document Package Inspection / 文档包检查
 Before editing, inspect the DOCX package and verify the following parts:
@@ -219,6 +265,19 @@ For rebuilt citations, prefer real Zotero-linked citation items using:
 Do not invent item keys. Check the local Zotero library first.
 
 For rebuilt citation payloads, standardize `citationItems[].itemData` from the local Zotero API rather than relying on `id + uri` alone.
+
+## Project Collection and Attachment Gate / 项目 collection 与附件闸门
+For manuscript workflows, citation validity is not just "the item exists in Zotero."
+
+Required checks:
+- Every cited reference must resolve to an existing local Zotero item.
+- If a project-specific Zotero collection exists or the user identifies a target collection, every cited item should belong to that collection before completion unless the user explicitly opts out.
+- Every cited item should have at least one child attachment or child link when a PDF, DOI landing page, publisher URL, or stable web source can reasonably be attached.
+
+Operational rule:
+- If DOI or URL metadata allows automatic attachment, attempt the import or linked attachment first.
+- If automatic attachment is not possible or fails, ask the user for the missing PDF or URL before claiming the citation workflow is complete.
+- Do not describe a citation set as "fully curated" when most cited items remain metadata-only.
 
 ## Local API Repair / 本地 API 修复
 When a rebuild needs authoritative item metadata for `citationItems[].itemData`, use the local Zotero API against `127.0.0.1:23119`:
@@ -269,6 +328,7 @@ Treat this as first-time initialization, not immediate failure. `ZoteroRefresh` 
 10. Reopen the document in Word or re-inspect the package to confirm the refresh actually happened and no non-target content disappeared.
 11. Compare against the backup or pre-edit baseline to confirm there was no unintended deletion, truncation, or layout-breaking corruption.
 12. Only after the source document is verified, decide whether a separate static submission file is required.
+13. Verify that cited Zotero items satisfy the project collection and attachment gate when that policy is in scope for the project.
 
 ## Static Export Procedure / 静态提交稿导出流程
 Only run this procedure after the Zotero-editable source document has already been repaired or verified and confirmed as the canonical manuscript. When exporting a static submission file from that source document, do not treat bibliography fields as generic inline fields.
@@ -315,12 +375,14 @@ Unless the target journal says otherwise, treat these as general Word-manuscript
 
 1. Use real Word character formatting for superscript, subscript, italic, bold, and small caps. Do not fake these with Unicode look-alike glyphs.
 2. For scientific notation, prefer `a × 10^n` with a real multiplication sign `×` and a truly superscripted exponent. In Word terms, the exponent should be plain text in its own run with superscript formatting applied, not a pasted Unicode form such as `10⁻3`.
-3. Do not normalize hyphen, minus, en dash, and em dash blindly. Preserve one role per symbol and keep the manuscript's convention consistent unless the target journal explicitly wants a different style.
-4. Use true italic formatting for material that field convention marks as italic, such as Latin species names or other biologic labels that genuinely require italics. Do not replace italics with styled Unicode characters.
-5. Use real symbol characters when the symbol itself carries meaning, such as Greek letters, `≤`, `≥`, `±`, and `×`. Do not silently downgrade them to plain-text approximations unless the journal or submission system requires it.
-6. If the user asks for formatting-only cleanup, keep the change at run level whenever possible. Do not rewrite prose, renumber citations, or refresh Zotero unless explicitly requested. The only exception is normalizing the typography of identifiers that are already intentionally retained in the prose.
-7. If verification uses XML extraction, `pdftotext`, or similar text-only views, remember that correctly superscripted text may flatten during extraction. Judge the final formatting from Word or rendered PDF output, not from plain extracted text alone.
-8. Do not let code-style monospace or inline backticks leak into narrative manuscript sections merely because the source text came from Markdown, notebooks, or scripts. Journal-facing prose should read like prose unless the target journal explicitly requires a software or reproducibility notation in the main text. User preference for reproducibility detail should normally be satisfied in Methods supplements, appendices, or separate technical artifacts rather than by making the main narrative read like code.
+3. Do not let Markdown notation leak into the manuscript-facing Word files. Syntax such as `10^-6^`, `H~2~O`, backticks, or similar source markup is not acceptable in either the Zotero-editable manuscript or the static submission copy.
+4. Do not normalize hyphen, minus, en dash, and em dash blindly. Preserve one role per symbol and keep the manuscript's convention consistent unless the target journal explicitly wants a different style.
+5. Use true italic formatting for material that field convention marks as italic, such as Latin species names or other biologic labels that genuinely require italics. Do not replace italics with styled Unicode characters.
+6. Use real symbol characters when the symbol itself carries meaning, such as Greek letters, `≤`, `≥`, `±`, and `×`. Do not silently downgrade them to plain-text approximations unless the journal or submission system requires it.
+7. If the user asks for formatting-only cleanup, keep the change at run level whenever possible. Do not rewrite prose, renumber citations, or refresh Zotero unless explicitly requested. The only exception is normalizing the typography of identifiers that are already intentionally retained in the prose.
+8. If verification uses XML extraction, `pdftotext`, or similar text-only views, remember that correctly superscripted text may flatten during extraction. Judge the final formatting from Word or rendered PDF output, not from plain extracted text alone.
+9. Do not let code-style monospace or inline backticks leak into narrative manuscript sections merely because the source text came from Markdown, notebooks, or scripts. Journal-facing prose should read like prose unless the target journal explicitly requires a software or reproducibility notation in the main text. User preference for reproducibility detail should normally be satisfied in Methods supplements, appendices, or separate technical artifacts rather than by making the main narrative read like code.
+10. Do not leave local-environment narration such as "in the current workspace", agent-process notes, temporary paths, or machine-specific statements in manuscript-facing sections such as Data Availability, Methods, footnotes, acknowledgments, or supplements unless the journal explicitly requests them.
 
 ## Mac Word Automation / macOS 上的 Word 自动化
 On macOS, Word Zotero integration can be triggered through Word macros such as:
@@ -352,6 +414,10 @@ Before claiming success, verify all applicable items for the chosen workflow pat
 - the regenerated bibliography count matches the intended unique references
 - any style-driven renumbering is explained to the user
 - any journal-specific submission rule that matters for the chosen output file has been checked against official author instructions
+- citation distribution across Introduction and Discussion has been checked for section-role fit, and no edit was made merely to force similar raw citation counts
+- if a target journal is known, the user has been explicitly told whether the journal requires, recommends, or does not explicitly mention a static submission manuscript
+- no second user-facing live manuscript remains outside `name_zotero.docx` when a static copy is not in scope
+- project-collection membership and attachment/link completeness of cited items have been checked when the project policy requires them
 
 If a Zotero-editable source document is in scope, also verify:
 - the Zotero-editable source document exists and is the canonical manuscript for any later static export
@@ -389,18 +455,26 @@ This skill is considered working when it consistently routes these cases to the 
 - **Fake blank gap under `References`**: often a symptom of the same bibliography-anchor bug rather than true paragraph spacing
 - **Gray brackets around headings or paragraph ends**: often caused by visible bookmark/navigation anchors from pandoc or Word display settings rather than real manuscript punctuation; inspect bookmark nodes before rewriting content
 - **Duplicated first-page title**: often caused by combining YAML/title metadata with a separate `Title Page` heading and `Title:` line in the same DOCX build path
+- **Second live manuscript left behind**: an internal rebuild checkpoint was treated as a deliverable instead of being kept under `agents/` or a temporary path
 - **Data Availability mismatch**: references may be technically valid, but the journal-facing submission copy may read better with explicit URLs unless author instructions require citation-style formatting
 - **Code-like methods prose in narrative sections**: function calls, argument syntax, workspace or authentication details, or monospace fragments can survive from Markdown or script-derived drafting; translate them into methodological prose unless the journal explicitly requires that notation, while allowing only genuinely informative identifiers in Methods
+- **Current-study limitation leakage into the Introduction**: evidence-lock or reviewer-defense wording about non-independence, nested releases, or hierarchy rules drifted into the Introduction and made it read like Methods or Discussion instead of background-gap-aim narrative; this does not mean prior-literature limitations should be removed from the Introduction
+- **Mechanical citation-parity chasing**: Introduction and Discussion were padded or trimmed just to make citation counts look similar, instead of fixing the real issue of overreviewing in the Introduction or under-contextualized claims in the Discussion
 - **Unicode fake superscripts/subscripts**: the document looks acceptable at a glance but uses pasted glyphs instead of Word formatting, making later editing and consistency checks brittle
+- **Markdown syntax leakage**: the Word manuscript still shows source notation such as `10^-6^` or backticks instead of true Word formatting
+- **Metadata-only Zotero curation**: cited items exist in Zotero but most lack child attachments or child links, so the manuscript workflow is not truly source-complete
+- **Local-workflow prose leakage**: Data Availability or related sections mention the current workspace, local machine paths, or agent-generated process wording
 - **Text extraction looks flat after correct superscripting**: XML or PDF text extraction may show `10-3`; verify the rendered page before treating this as a formatting failure
 
 ## Output Contract / 输出约定
 When you finish, report:
 - which file is the Zotero-editable source document
 - which file is the static submission file, if one exists
+- if a target journal was provided, whether that journal requires, recommends, or does not explicitly mention a static submission copy, with the official source basis and date checked
 - which journal-facing formatting adjustments were made, if any
 - whether refresh completed successfully
 - how many live citation fields and unique Zotero items were verified
+- whether cited Zotero items were checked for project-collection membership and how many lacked attachment/link children
 - whether document integrity was checked and whether any non-target content changed
 - any remaining user-only blocker, narrowed to a single concrete action
 
