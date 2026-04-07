@@ -2,7 +2,7 @@
 
 ### Zotero 引文与格式
 
-**[English](README.en.md)** | **中文**
+**中文**
 
 `zotero-cite-and-format` 处理的是 Word 手稿里“引文完整性”和“期刊格式要求”同时成立的场景。Zotero 修复只是其中一部分，不是全部。它既处理 Zotero 引文是否还能刷新、参考文献是否还能安全重建，也处理面向目标期刊的 Word 格式细节，以及从已验证的 Zotero 源稿导出投稿静态稿。
 
