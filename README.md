@@ -105,6 +105,32 @@ Zotero 的 bibliography 里，第 1 条参考文献有时和 bibliography field 
 - 不涉及 Zotero 的普通 DOCX 排版
 - 在目标期刊未定、也没有静态稿要求时，机械地先导出一份静态稿
 
+## 安装
+
+### CC Switch
+
+```bash
+git clone https://github.com/laleoarrow/zotero-cite-and-format.git ~/agents/zotero-cite-and-format
+mkdir -p ~/.cc-switch/skills
+ln -s ~/agents/zotero-cite-and-format/skills/zotero-cite-and-format ~/.cc-switch/skills/zotero-cite-and-format
+```
+
+### Claude Code
+
+```bash
+git clone https://github.com/laleoarrow/zotero-cite-and-format.git ~/agents/zotero-cite-and-format
+ln -s ~/agents/zotero-cite-and-format/skills/zotero-cite-and-format ~/.claude/skills/zotero-cite-and-format
+```
+
+### Codex CLI
+
+```bash
+git clone https://github.com/laleoarrow/zotero-cite-and-format.git ~/agents/zotero-cite-and-format
+ln -s ~/agents/zotero-cite-and-format/skills/zotero-cite-and-format ~/.codex/skills/zotero-cite-and-format
+```
+
+安装时应始终指向 `skills/zotero-cite-and-format` 这个规范 skill 根目录，因为它包含 `SKILL.md` 和 `references/`。
+
 ## 相关 Skills
 
 | Skill | 用途 |

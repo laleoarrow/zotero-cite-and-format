@@ -123,6 +123,32 @@ For any submission file exported from a Zotero-editable source document, verify:
 4. the references run consecutively
 5. the body text still matches the vetted live/source manuscript
 
+## Installation
+
+### CC Switch
+
+```bash
+git clone https://github.com/laleoarrow/zotero-cite-and-format.git ~/agents/zotero-cite-and-format
+mkdir -p ~/.cc-switch/skills
+ln -s ~/agents/zotero-cite-and-format/skills/zotero-cite-and-format ~/.cc-switch/skills/zotero-cite-and-format
+```
+
+### Claude Code
+
+```bash
+git clone https://github.com/laleoarrow/zotero-cite-and-format.git ~/agents/zotero-cite-and-format
+ln -s ~/agents/zotero-cite-and-format/skills/zotero-cite-and-format ~/.claude/skills/zotero-cite-and-format
+```
+
+### Codex CLI
+
+```bash
+git clone https://github.com/laleoarrow/zotero-cite-and-format.git ~/agents/zotero-cite-and-format
+ln -s ~/agents/zotero-cite-and-format/skills/zotero-cite-and-format ~/.codex/skills/zotero-cite-and-format
+```
+
+Always point the host to `skills/zotero-cite-and-format`, which is the canonical skill root containing both `SKILL.md` and `references/`.
+
 ## When to Use It
 
 Use `zotero-cite-and-format` for requests like:

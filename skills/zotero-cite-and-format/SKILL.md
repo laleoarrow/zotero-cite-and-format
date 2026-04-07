@@ -96,7 +96,7 @@ If a proposed edit path is likely to drop content, choose a narrower or safer pa
 ## Manuscript Prose Rule / 稿件叙述规则
 For journal-facing manuscript prose, prefer scientific narrative over implementation syntax.
 
-Rules:
+Note: the Section-Role Rule in `academic-editing` also governs Introduction/Methods/Discussion structure. If both skills are loaded, this skill's prose rules apply specifically to citation-and-formatting work; for broader manuscript-level rewriting, defer to `academic-editing`.
 - Override order for manuscript prose is: target-journal requirement first, then explicit user instruction for the current manuscript scope, then the default anti-code-tone rule. Neither journal silence nor generic reproducibility preference is enough to justify code-style narrative in abstract, Results, Discussion, or Conclusions.
 - Do not leave literal function calls, wrapper names, argument strings, or code-style tokens in the abstract, Results, Discussion, or Conclusions unless the target journal explicitly requires them.
 - Treat "no code-tone in manuscript narrative" as an explicit default rule, not a stylistic preference. Journal-facing prose should not read like pasted scripts, package calls, or pipeline logs.
@@ -104,6 +104,8 @@ Rules:
 - Do not introduce unsupported field-wide generalizations into journal-facing prose, such as claims about how large public resources are "often" used, unless the statement is backed by a source and materially needed. When support is absent, rewrite the sentence as a concrete scientific gap or study rationale.
 - Do not enforce numeric parity between Introduction and Discussion citations as a manuscript-quality rule. Mainstream guidance evaluates whether citations are balanced, relevant, and useful for the role of each section, not whether the raw counts are similar.
 - In Methods, translate implementation into what the analysis did and why it matters. Thresholds, models, endpoint identifiers, software names, and selected identifiers such as dataset codes or outcome labels may remain only when they materially clarify the methodological operation, reproducibility, or source mapping. Raw function calls, `package::function` syntax, argument strings, authentication details, workspace paths, and command fragments should not remain in the main text when a prose translation would convey the method just as well.
+- In Methods, report only analysis-relevant software detail. Keep software names or versions only when they materially support reproducibility of the scientific analysis itself. Do not pad the manuscript with agent-side document-building libraries, local asset-generation dependencies, or package inventories that were useful for drafting but are not part of the research method the reader needs to understand or reproduce.
+- When supplementary tables are delivered as Excel workbooks, format them as journal-style three-line tables rather than leaving raw spreadsheet defaults. That means: keep a clear in-sheet caption/title, hide worksheet gridlines, avoid colored Excel themes and filter widgets unless the journal explicitly wants them, omit vertical borders, place a rule above and below the header row, and place a closing bottom rule at the end of the table. The workbook should read like a submission-ready table artifact, not like an analysis dump.
 - Do not let a Methods cleanup create a catch-all bucket such as "Software, Reporting, and Ethics" unless the target journal explicitly prefers that structure. Put ethics and reporting scope in Study Design or the relevant data-source subsection, and place software details near the analytic step they support.
 - If non-independence, nested-cohort dependence, or hierarchy rules must be introduced before Methods, compress them into brief study-rationale language and reserve the full caveat or defense for Methods or Discussion.
 - Internal endpoint codes, portal-specific variable names, or study-export labels that do not help an informed reader understand the method should be moved out of the main narrative and, if still needed, into a supplement, note, or reproducibility artifact.
@@ -112,6 +114,7 @@ Rules:
 - Even in Methods, do not let code-like details create visibly different typography from the surrounding text unless the journal explicitly requires a distinct format for such material.
 - When target-journal guidance is silent, default to the journal's conventional published prose style rather than to implementation-level notation.
 - Citation-balance heuristic: the Introduction should cite enough key background and gap-defining studies without turning into a literature review, whereas the Discussion should cite enough prior work to compare findings, explain agreement or disagreement, and place the results in context. If Discussion is interpretive but sparsely cited, add targeted comparison citations. Only when the Discussion is already adequately supported for its interpretive claims should rebalancing default to trimming Introduction citation stacking rather than padding Discussion just to match counts. This is most useful for disease-burden or mechanism/background claim clusters in the Introduction.
+- Discussion-depth heuristic: when the Discussion feels thin, do not solve it by adding generic review citations at random. First diagnose which of the following is missing, then add targeted references accordingly: 1) comparison citations that show where the current findings agree, extend, or diverge from prior cataract or adjacent-disease evidence; 2) clinical-relevance citations that justify why the prioritized panel matters for risk stratification, prevention, or follow-up; 3) translation-boundary citations that explain why the manuscript still stops short of immediate clinical deployment; and 4) mechanism-boundary citations that support plausible biological interpretation without overstating metabolite-specific causality. If these functions require it, increasing the total reference count is appropriate.
 - For citation-trimming decisions, define a claim cluster narrowly as one discrete factual assertion, or one tightly linked pair of assertions in the same sentence or adjacent clause that genuinely rely on the same support base. Do not merge several distinct claims into one trimming unit.
 - "Most authoritative" does not mean "largest number of reviews." Keep the sources that best support the exact claim being made, usually favoring claim-appropriate primary studies plus at most one major review, guideline, or global-burden source when that broader source is what the sentence actually needs.
 
@@ -129,6 +132,7 @@ Examples:
 - Bad citation-ratio heuristic: "Discussion should have about the same number of citations as the Introduction."
 - Better section-role heuristic: "Introduction and Discussion should each have the citations needed for their own job; add or trim references based on background-vs-interpretation needs, not to equalize raw counts."
 - Better trimming heuristic: "For dense background claims in the Introduction, once the Discussion is already adequately supported, keep the 2 to 3 most claim-appropriate citations per narrowly defined claim cluster unless the journal or field convention clearly needs more."
+- Better Discussion upgrade heuristic: "If Discussion lacks clinical relevance or depth, add the missing comparison, clinical, translation, or mechanism-boundary citations rather than padding with loosely related reviews."
 
 ## Output Naming Policy / 输出命名规则
 The user-facing manuscript outputs should be named by one stable stem only.
@@ -173,10 +177,66 @@ Rules:
 | Introduction opens with current-study non-independence caveats or defensive hierarchy language | Keep prior-study limitations in the Introduction if they define the gap, but move the full caveat about the current study to Methods or Discussion and keep only concise study-rationale wording in the Introduction unless the journal explicitly wants the caveat there. |
 | Introduction contains an unsupported sentence about what researchers usually do with a public resource | Remove the sociology-of-the-field claim unless it is sourced; restate the gap in terms of unanswered scientific or analytical questions. |
 | User asks whether Discussion citations should roughly equal Introduction citations | Do not enforce count matching. Check whether the Introduction is balanced and non-review-like, and whether the Discussion has enough citations to compare findings with prior studies and support interpretive claims. If the Discussion is already adequately supported, trim dense Introduction citation stacks before adding new Discussion references just to narrow the gap; otherwise add the missing Discussion citations first. |
+| Main-text supplement numbering looks out of order | Check the full supplement package, not only the first visible file. Supplementary numbering should match the actual deliverable set cited in the manuscript. If only one supplement is truly in scope, it should usually be S1; if S1/S2/S4 already exist as deliverables, S3 is not inherently wrong. |
 | Methods ends with a leftover `Software, Reporting, and Ethics` bucket | Redistribute ethics/reporting language to Study Design or the relevant source subsection and move software names to the analytic sections that used them, unless the journal explicitly requires a separate heading. |
 | STROBE-MR covers only one component of a mixed-design paper | State that the MR component was reported with reference to STROBE-MR where applicable; do not imply that the whole paper fully conforms to the checklist if that is not true. |
 | Word manuscript contains markdown-style superscript such as `10^-6^` | Replace it with true Word run-level superscript formatting before treating the file as manuscript-ready. |
 | Data Availability says "current workspace", local file paths, or agent-process narration | Rewrite it into manuscript-ready repository or availability language; do not leak local workflow narration into a journal-facing document. |
+| References appear as plain text under a `References` heading even though body citations are Zotero-live | This is expected Word behavior when field codes are not being displayed. Verify the presence of the `ADDIN ZOTERO_BIBL` field in the DOCX package or through Word field-code display before concluding that the bibliography is disconnected. |
+| User wants supplementary tables as Excel rather than Word/PDF | Export each supplementary table as its own `.xlsx` with journal-style three-line formatting, keep numbering consistent with the main-text citations, and do not leave default spreadsheet gridlines or colored table themes in the deliverable. |
+| Main tables were placed only in a supplementary Excel file | Move them back into the main manuscript body unless the target journal explicitly permits main-table-only supplement placement. |
+| Figure legends appear scattered throughout the body text | Consolidate all figure legends into a single Figure Legends section after References (or before figures if the journal attaches figures to that section), unless the journal explicitly requires in-text legend placement. |
+| Figure image files are embedded inline in the DOCX | Confirm whether the journal requires embedded or separately uploaded figures; for most SCI journals, figures are uploaded as separate high-resolution files and the DOCX body contains only brief callouts plus a consolidated Legends section. |
+| Supplementary figure legends are mixed with main-text figure legends | Separate them: main-text legends belong in the main manuscript Legends section; supplementary figure legends belong in the supplementary file alongside those figures. |
+
+## Table and Figure Placement Rule / 表格与图片放置规则（强制执行）
+
+This rule is **mandatory** and must be checked before finalizing any submission package. Placement requirements vary by journal — do not apply any default layout without first checking the target journal's official author instructions.
+
+### Step 0: Journal Policy Lookup (Mandatory) / 期刊政策查询（必须在前）
+
+**When a target journal is known, look up its official author instructions before making any placement decision.**
+
+Required lookups:
+- Where must main tables appear? (in-body vs. supplement-permitted vs. end-of-manuscript)
+- Where must figure legends appear? (after References, end-of-manuscript, attached to figures, or in-text)
+- How must figure files be submitted? (embedded in DOCX vs. separate high-resolution uploads vs. both)
+- Are supplementary tables/figures submitted separately or within the same file?
+
+If the journal's author instructions are silent on a specific point, state that explicitly and apply the most conservative default (main tables in body; legends consolidated after References; figures as separate uploads).
+
+Do not apply a prior journal's requirements to a new submission. Each journal must be checked independently.
+
+### Tables / 表格
+
+After confirming journal policy:
+- Place main tables (Table 1, Table 2, …) wherever the journal requires — most journals require them in the manuscript body, but some allow or prefer end-of-text placement or separate files.
+- Supplementary tables (Supplementary Table S1, S2, …) go in whichever supplementary format the journal specifies (Excel, Word, or within the main file).
+- If the user's current placement violates what the journal actually requires, flag it:
+  > `[Placement Error] Table X placement does not match [Journal]'s author instructions: [journal requirement]. Current placement: [what the file has].`
+- Do not silently leave tables in the wrong location. Do not move tables without verifying journal policy.
+- When supplementary tables are delivered as Excel, apply journal-style three-line table formatting: clear caption, hidden gridlines, no colored themes or filter widgets, rules above/below header and at table bottom, no vertical borders.
+
+### Figures / 图片
+
+After confirming journal policy:
+- Place figure legends in whatever location the journal specifies. Common variants:
+  - Consolidated **Figure Legends** section after References (e.g., IOVS, many ophthalmology/clinical journals)
+  - Legends embedded immediately after corresponding figures (some methods/data journals)
+  - Legends in a separate legends document
+- Figure files: follow the journal's specification (separate high-resolution uploads vs. embedded in DOCX vs. end-of-manuscript).
+- The DOCX body should usually contain only figure callouts (e.g., `Figure 1.`) and not full legends or embedded images unless the journal explicitly requires otherwise.
+- Supplementary figure legends stay in the supplementary file alongside those figures.
+- If the current file's figure legend placement or figure file format violates journal requirements, flag it:
+  > `[Placement Error] Figure legends are [current state] but [Journal] requires [journal requirement].`
+
+### Enforcement Actions / 执行动作
+Before claiming the submission package is ready:
+1. Confirm that journal author instructions were checked for table placement, figure legend placement, and figure file delivery format.
+2. Verify that every main table, every figure legend, and every figure are placed/delivered in the journal-required location or format.
+3. If any placement violates journal policy, report a `[Placement Error]` block with the specific journal requirement and the current file state, and resolve it before export.
+4. If the journal is unknown or instructions are silent, state what default was applied and why.
+5. Do not silently produce a noncompliant submission package.
 
 ## Non-Negotiable Rule / 不可协商规则
 Never fake Zotero by inserting plain text that merely looks like a citation.
@@ -281,6 +341,7 @@ Operational rule:
 - If DOI or URL metadata allows automatic attachment, attempt the import or linked attachment first.
 - If automatic attachment is not possible or fails, ask the user for the missing PDF or URL before claiming the citation workflow is complete.
 - Do not describe a citation set as "fully curated" when most cited items remain metadata-only.
+- Best-effort degradation: if the user cannot provide a PDF for a paywalled article, record the gap in the completion report ("item X: metadata-only, no open-access PDF found") rather than blocking the entire workflow.
 
 ## Local API Repair / 本地 API 修复
 When a rebuild needs authoritative item metadata for `citationItems[].itemData`, use the local Zotero API against `127.0.0.1:23119`:
@@ -293,6 +354,8 @@ Use `?format=csljson` as the standard repair path for rebuilding `itemData`.
 Operational notes:
 - prefer non-browser local requests to the local API over browser-origin fetches, which can fail because webpages often cannot read responses from the integrated Zotero HTTP server
 - use the API output to repair Zotero field payloads, not as a substitute for official Zotero policy guidance
+- if Zotero is not running or the API is unreachable, tell the user to open Zotero first; do not silently skip metadata repair and produce incomplete field payloads
+- if Better BibTeX is expected but not installed, note the gap and fall back to the standard Zotero API
 
 ## Style Initialization / 样式初始化
 Verify the target CSL style locally before writing it into the document.
@@ -374,18 +437,9 @@ For any static submission file derived from a Zotero-editable source document, v
 9. unrelated Word fields such as page numbering still behave correctly after export
 
 ## SCI Formatting Hygiene / SCI 通用格式卫生
-Unless the target journal says otherwise, treat these as general Word-manuscript rules for English SCI submissions:
+Unless the target journal says otherwise, treat these as general Word-manuscript rules for English SCI submissions.
 
-1. Use real Word character formatting for superscript, subscript, italic, bold, and small caps. Do not fake these with Unicode look-alike glyphs.
-2. For scientific notation, prefer `a × 10^n` with a real multiplication sign `×` and a truly superscripted exponent. In Word terms, the exponent should be plain text in its own run with superscript formatting applied, not a pasted Unicode form such as `10⁻3`.
-3. Do not let Markdown notation leak into the manuscript-facing Word files. Syntax such as `10^-6^`, `H~2~O`, backticks, or similar source markup is not acceptable in either the Zotero-editable manuscript or the static submission copy.
-4. Do not normalize hyphen, minus, en dash, and em dash blindly. Preserve one role per symbol and keep the manuscript's convention consistent unless the target journal explicitly wants a different style.
-5. Use true italic formatting for material that field convention marks as italic, such as Latin species names or other biologic labels that genuinely require italics. Do not replace italics with styled Unicode characters.
-6. Use real symbol characters when the symbol itself carries meaning, such as Greek letters, `≤`, `≥`, `±`, and `×`. Do not silently downgrade them to plain-text approximations unless the journal or submission system requires it.
-7. If the user asks for formatting-only cleanup, keep the change at run level whenever possible. Do not rewrite prose, renumber citations, or refresh Zotero unless explicitly requested. The only exception is normalizing the typography of identifiers that are already intentionally retained in the prose.
-8. If verification uses XML extraction, `pdftotext`, or similar text-only views, remember that correctly superscripted text may flatten during extraction. Judge the final formatting from Word or rendered PDF output, not from plain extracted text alone.
-9. Do not let code-style monospace or inline backticks leak into narrative manuscript sections merely because the source text came from Markdown, notebooks, or scripts. Journal-facing prose should read like prose unless the target journal explicitly requires a software or reproducibility notation in the main text. User preference for reproducibility detail should normally be satisfied in Methods supplements, appendices, or separate technical artifacts rather than by making the main narrative read like code.
-10. Do not leave local-environment narration such as "in the current workspace", agent-process notes, temporary paths, or machine-specific statements in manuscript-facing sections such as Data Availability, Methods, footnotes, acknowledgments, or supplements unless the journal explicitly requests them.
+Read: `references/sci-formatting.md`.
 
 ## Mac Word Automation / macOS 上的 Word 自动化
 On macOS, Word Zotero integration can be triggered through Word macros such as:
@@ -422,6 +476,9 @@ Before claiming success, verify all applicable items for the chosen workflow pat
 - if a target journal is known, the user has been explicitly told whether the journal requires, recommends, or does not explicitly mention a static submission manuscript
 - no second user-facing live manuscript remains outside `name_zotero.docx` when a static copy is not in scope
 - project-collection membership and attachment/link completeness of cited items have been checked when the project policy requires them
+- all main tables (Table 1–N) are present in the main manuscript DOCX body and not only in a supplementary file
+- all figure legends are consolidated in a single Legends section after References, not scattered in body text, unless the target journal explicitly requires otherwise
+- figure image files are confirmed as separate upload assets; if they are embedded inline in the DOCX, journal policy on figure delivery has been checked and confirmed
 
 If a Zotero-editable source document is in scope, also verify:
 - the Zotero-editable source document exists and is the canonical manuscript for any later static export
@@ -446,30 +503,19 @@ For realistic coverage checks, compare the current task against the cases in `re
 This skill is considered working when it consistently routes these cases to the correct path and the verification checklist can be satisfied on the output files.
 
 ## Common Failure Modes / 常见失败模式
-- **Numbers visible but not live**: the document only contains rendered text
-- **Broken bibliography**: a field exists, but stale rendered references were left behind
-- **Style dialog blocks automation**: document preferences were not initialized for the new file
-- **False-green refresh**: the macro returned successfully, but the rendered bibliography or citations did not actually update
-- **Minimal field payload not refreshable**: rebuilt citations have `id + uri` but lack the `itemData` that Zotero practically needs to refresh reliably
-- **Collateral content loss**: citation repair or XML editing accidentally deleted existing manuscript text, tables, legends, or other non-target content
-- **DOCX integrity damage**: the file technically exists after editing, but Word opens it with repair prompts, corruption symptoms, or visibly broken layout
-- **Wrong numbering after refresh**: Zotero renumbered by true first appearance; this may be expected
-- **Metadata gap in a Zotero item**: bibliography renders but one entry is incomplete; fix the Zotero library item itself
-- **Dropped first reference during static export**: the exporter mishandled the bibliography anchor paragraph and deleted reference `1`
-- **Fake blank gap under `References`**: often a symptom of the same bibliography-anchor bug rather than true paragraph spacing
-- **Gray brackets around headings or paragraph ends**: often caused by visible bookmark/navigation anchors from pandoc or Word display settings rather than real manuscript punctuation; inspect bookmark nodes before rewriting content
-- **Duplicated first-page title**: often caused by combining YAML/title metadata with a separate `Title Page` heading and `Title:` line in the same DOCX build path
-- **Second live manuscript left behind**: an internal rebuild checkpoint was treated as a deliverable instead of being kept under `agents/` or a temporary path
-- **Data Availability mismatch**: references may be technically valid, but the journal-facing submission copy may read better with explicit URLs unless author instructions require citation-style formatting
-- **Code-like methods prose in narrative sections**: function calls, argument syntax, workspace or authentication details, or monospace fragments can survive from Markdown or script-derived drafting; translate them into methodological prose unless the journal explicitly requires that notation, while allowing only genuinely informative identifiers in Methods
-- **Current-study limitation leakage into the Introduction**: evidence-lock or reviewer-defense wording about non-independence, nested releases, or hierarchy rules drifted into the Introduction and made it read like Methods or Discussion instead of background-gap-aim narrative; this does not mean prior-literature limitations should be removed from the Introduction
-- **Mechanical citation-parity chasing**: Introduction and Discussion were padded or trimmed just to make citation counts look similar, instead of fixing the real issue of overreviewing in the Introduction or under-contextualized claims in the Discussion
-- **Citation stacking in background claims**: disease-burden or mechanism sentences in the Introduction accumulated 4 to 6 references where 2 to 3 authoritative citations would usually carry the claim more cleanly
-- **Unicode fake superscripts/subscripts**: the document looks acceptable at a glance but uses pasted glyphs instead of Word formatting, making later editing and consistency checks brittle
-- **Markdown syntax leakage**: the Word manuscript still shows source notation such as `10^-6^` or backticks instead of true Word formatting
-- **Metadata-only Zotero curation**: cited items exist in Zotero but most lack child attachments or child links, so the manuscript workflow is not truly source-complete
-- **Local-workflow prose leakage**: Data Availability or related sections mention the current workspace, local machine paths, or agent-generated process wording
-- **Text extraction looks flat after correct superscripting**: XML or PDF text extraction may show `10-3`; verify the rendered page before treating this as a formatting failure
+Load when diagnosing an unexpected symptom or verifying that the current task's failure is covered.
+
+Read: `references/failure-modes.md`.
+
+## Context Management / 上下文管理
+This skill file is large. Follow these rules to manage context:
+- Core sections (Accuracy Rule, Source-First Gate, Non-Negotiable Rule, Editable vs Static Split, Preferred Repair Procedure, Verification Checklist) are always needed.
+- Reference files should be loaded on demand:
+  - `references/official-sources.md` — when verifying Zotero or journal policy
+  - `references/validation-cases.md` — when checking failure coverage
+  - `references/failure-modes.md` — when diagnosing an unexpected symptom
+  - `references/sci-formatting.md` — when doing formatting cleanup
+- The Manuscript Prose Rule section overlaps with `academic-editing`'s Section-Role Rule. If both are loaded, this skill governs citation/formatting scope; `academic-editing` governs broader prose structure.
 
 ## Output Contract / 输出约定
 When you finish, report:
