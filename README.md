@@ -2,106 +2,100 @@
 
 ### Zotero 引文与格式
 
-`zotero-cite-and-format` 处理的是 Word 手稿里“引文完整性”和“期刊格式要求”同时成立的场景。Zotero 修复只是其中一部分，不是全部。它既处理 Zotero 引文是否还能刷新、参考文献是否还能安全重建，也处理面向目标期刊的 Word 格式细节，以及从已验证的 Zotero 源稿导出投稿静态稿。
+`zotero-cite-and-format` 是一个 **Word-facing manuscript skill**。它处理的不是“找文献”本身，而是 **Word 手稿里的 Zotero 活字段、参考文献、期刊格式、导出策略和最终 QA**。
 
-默认不应该一上来就导出静态稿。先问两个问题：
-- 目标期刊是什么？
-- 这个期刊或投稿系统是否明确要求提交去掉 field codes 的静态手稿？
+它的核心目标只有一个：**把手稿保持为可继续用 Zotero 编辑、能按期刊要求导出、且在 Word 里稳定工作的规范稿件。**
 
-如果期刊还没定，或者暂时没有静态稿要求，就先只维护 `Zotero 可编辑稿`。
+## 它负责什么
 
-默认顺序应当是强制的：
-1. 先修好或确认 `Zotero 可编辑稿`
-2. 把这个 Zotero 版本当作唯一的规范源稿
-3. 只有确实需要投稿静态稿时，才从这个源稿导出
+- 修复或核对 Zotero live fields
+- 刷新或重建 bibliography
+- 区分 `Zotero 可编辑稿` 与 `投稿静态稿`
+- 根据 review / research 手稿类型路由不同格式规则
+- 在标题页、摘要、表格、图注、补充材料、符号和 Word run-level 细节上做期刊向格式控制
+- 在 repeated corruption、unreadable content、导出后 ref1 丢失等场景下执行 package-level QA
 
-它适合这几类情况：
-- Zotero 识别不到这些引文，或者这些引文已经不能继续刷新/编辑
-- bibliography 损坏、重复，或者一刷新就报错
-- 需要按目标期刊要求调整 Word 手稿格式，但又不能把 Zotero 活字段或语义格式弄坏
-- 需要把稿件分成两份：
-  - 一份继续用 Zotero 改
-  - 一份提交投稿系统
-- 需要确认某个期刊是否应该提交静态稿而不是带 field code 的源稿
+## 它不负责什么
 
-## 核心原则
+- Zotero library 搜索、导入、全文获取、API 查询
+- 普通正文润色或综述语言重写
+- 与 Zotero 无关的纯 DOCX 排版
 
-1. 不要把普通文本伪装成 Zotero citation。
-2. 先分清楚目标文件是 `Zotero 可编辑稿` 还是 `投稿静态稿`。
-3. 任何会影响投稿行为的判断，先看官方来源：
-   - Zotero 官方 KB
-   - Zotero 官方 Word 集成实现
-   - 目标期刊 author instructions
+这些分别应交给：
+- `zotero:Zotero`
+- `academic-editing`
+- `doc`
 
-## 最容易踩的坑
+## 核心约束
 
-最危险的不是报错，而是“看起来差不多”。
-
-Zotero 的 bibliography 里，第 1 条参考文献有时和 bibliography field 的锚段在同一个段落里。静态导出时如果把这个段落按普通 field 去剥，就会出现三个典型问题：
-- `ref 1` 丢失
-- `References` 下面出现一大块空白
-- 文献列表直接从 `2.` 开始
-
-所以静态导出后一定要查：
-- `ZOTERO_ITEM = 0`
-- `ZOTERO_BIBL = 0`
-- `References` 后面是不是立刻接 `1.`
-
-## SCI 通用格式卫生
-
-除非目标期刊另有明确要求，英文 SCI 的 Word 手稿应尽量把“有语义的格式”保留为真正的 Word 格式，而不是靠长得像的字符去伪装。
-
-落到实操上，通常意味着：
-- 科学计数法的指数用真正的上标格式
-- 优先写成 `1.54 × 10` 加上标 `-3`，而不是直接粘成 `1.54 × 10⁻3`
-- 该用斜体的内容就用真正斜体，不要用伪装字符
-- 不要把 hyphen、minus、en dash、em dash 不分场景地混成一种符号
-- 验证时看 Word 或渲染后的 PDF 页面，因为纯文本提取经常会把正确的上标压平成 `10-3`
-
-## 怎么验证这个 skill 是能用的
-
-这个 skill 现在是 `说明型 skill`，不是带现成脚本的自动化工具。所以“能不能运行”，看的不是单元测试，而是三件事：
-- 会不会把问题先分成 `Zotero 可编辑稿` 和 `投稿静态稿`
-- 会不会去查 Zotero 和期刊官方规则，而不是凭印象乱说
-- 处理完以后，能不能把结果核到文档结构上
-
-仓库里的 `references/` 就是为这个准备的：
-- `references/official-sources.md`
-  - 放官方依据，防止把 Word/Zotero 行为说错
-- `references/validation-cases.md`
-  - 放真实失败案例，检查这个 skill 有没有覆盖到关键坑
-
-如果以后这个 skill 要升级成“真正可测试”的版本，再补 `scripts/` 更合适。那时候才值得加自动化测试。
+- 规范源稿永远是 `name_zotero.docx`
+- `name.docx` 只在期刊/投稿系统要求或用户明确要求时才创建
+- 用户可见的 manuscript DOCX 最多保留两份
+- 完成后删除临时文件、throwaway 变体和 recovery 副本
+- 绝不伪造 Zotero citation
+- 绝不 unlink 规范源稿
+- 绝不把 `ADDIN ZOTERO_ITEM` 计数当作完整验证
 
 ## 处理顺序
 
-```text
-先把 Zotero 源稿弄好
-        ↓
-检查 docx 包结构
-        ↓
-确认 Zotero 条目和样式
-        ↓
-在 Word 里 refresh
-        ↓
-如确有需要，再从该源稿导出静态稿
-        ↓
-检查 ref 1、heading、field 数量
-```
+1. 先分清任务类型：
+   `Library / Citation Discovery`、`Live Field / Bibliography`、`Review Manuscript Formatting`、`Research Manuscript Formatting`、`Package Final Gate`
+2. 先修好或确认 `name_zotero.docx`
+3. 再做 Word-facing formatting
+4. 确有需要时才导出 static copy
+5. 最后做 package QA，并清理临时文件
 
-## 什么时候用，什么时候别用
+## 重灾区
 
-适合：
-- 修引文
-- 修参考文献
-- 导出投稿稿
-- 查 Zotero/Word 文档结构问题
+最常见的误判不是“明显报错”，而是：
 
-不适合：
-- 单纯润色正文
-- 单纯补 DOI
-- 不涉及 Zotero 的普通 DOCX 排版
-- 在目标期刊未定、也没有静态稿要求时，机械地先导出一份静态稿
+- field 数量看起来对，但 refresh 不工作
+- bibliography 看起来在，实际上 ref 1 丢了
+- Word 能打开一次，但反复 reopen 会触发 unreadable-content / recovery
+- 标题页、摘要、表格、脚注符号、斜体 `P`、上标等 run-level 格式在局部修文后 silently drift
+
+这个 skill 的设计重点，就是让这些问题先被路由出来，再去读对应 `references/`，而不是在 `SKILL.md` 里堆满细则。
+
+## references/ 分工
+
+- `word-zotero-workflow.md`
+  live-field repair、bibliography rebuild、refresh failure、static export
+- `manuscript-formatting.md`
+  title page、abstract、prose block、table、legend、supplement、spacing
+- `review-manuscripts.md`
+  narrative review、perspective、primer、review-style section
+- `research-manuscripts.md`
+  cohort、omics、MR、trial、methods-driven paper
+- `pre-submission-final-gate.md`
+  final / submit / 投稿前 / repeated package failure
+- `official-sources.md`
+  期刊 policy 或 Zotero 行为的官方依据
+- `sci-formatting.md`
+  斜体、上标、科学符号、run-level hygiene
+- `validation-cases.md`
+  真实失败案例与回归检查
+- `failure-modes.md`
+  正常流程解释不了的异常故障
+
+## 为什么现在的 SKILL.md 变短了
+
+旧版本的问题不是规则不够，而是：
+
+- 把“文件产物策略”写成了主叙事
+- 同一件事在 `Overview / Default target / Deliverable rule / Quick Reference / Output Contract` 里反复说
+- `SKILL.md` 自己承担了太多本应由 `references/` 承担的细节
+
+新版本保留全部关键要求，但把 `SKILL.md` 压缩成：
+
+- scope
+- core contract
+- hard rules
+- division of labor
+- route first
+- final gate
+- report back
+
+这使它更像一个触发器和调度器，而不是一本混合说明书。
 
 ## 安装
 
@@ -126,16 +120,6 @@ ln -s ~/agents/zotero-cite-and-format/skills/zotero-cite-and-format ~/.claude/sk
 git clone https://github.com/laleoarrow/zotero-cite-and-format.git ~/agents/zotero-cite-and-format
 ln -s ~/agents/zotero-cite-and-format/skills/zotero-cite-and-format ~/.codex/skills/zotero-cite-and-format
 ```
-
-安装时应始终指向 `skills/zotero-cite-and-format` 这个规范 skill 根目录，因为它包含 `SKILL.md` 和 `references/`。
-
-## 相关 Skills
-
-| Skill | 用途 |
-|-------|------|
-| `doc` | DOCX 结构化编辑与版式检查 |
-| `academic-editing` | 正文润色与内容一致性修订 |
-| `bioinfo-autopilot` | 数据与证据链核对 |
 
 ## License
 

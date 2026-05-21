@@ -2,6 +2,11 @@
 
 Use these sources before making any operational claim that affects a manuscript, a Zotero field, or submission behavior.
 
+## Section Index
+- Zotero official knowledge base
+- Zotero official Word integration repositories
+- Journal author instructions
+
 ## Zotero official knowledge base
 
 - Using the Zotero Word Plugin  
