@@ -11,6 +11,7 @@ This is a catalog of real failure modes observed in Zotero + Word manuscript wor
 - **Wrong numbering after refresh**: Zotero renumbered by true first appearance; this may be expected
 - **Metadata gap in a Zotero item**: bibliography renders but one entry is incomplete; fix the Zotero library item itself
 - **False bibliography alarm**: the reference list looks like ordinary text in Word, but this may simply be the rendered result of a real `ZOTERO_BIBL` field rather than a broken bibliography
+- **Raw Zotero field code leaked into the page**: the DOCX still opens, but Word or rendered PDF shows `ADDIN ZOTERO_ITEM`, `CSL_CITATION`, `zotero.org/groups/...`, or raw citation JSON in body text; this usually means the field cluster lost `begin`, `separate`, or `end` during XML/run surgery
 
 ## Export & Static-File Failures
 - **Dropped first reference during static export**: the exporter mishandled the bibliography anchor paragraph and deleted reference `1`
@@ -28,6 +29,7 @@ This is a catalog of real failure modes observed in Zotero + Word manuscript wor
 - **Unicode fake superscripts/subscripts**: the document looks acceptable at a glance but uses pasted glyphs instead of Word formatting, making later editing and consistency checks brittle
 - **Markdown syntax leakage**: the Word manuscript still shows source notation such as `10^-6^` or backticks instead of true Word formatting
 - **Text extraction looks flat after correct superscripting**: XML or PDF text extraction may show `10-3`; verify the rendered page before treating this as a formatting failure
+- **Scientific notation partly formatted**: the sentence reads correctly, but `P` is not italic or the exponent is left as baseline text such as `10-18`; this is a run-level formatting failure even if the paragraph text looks plausible in a text dump
 
 ## Prose & Content Failures
 - **Code-like methods prose in narrative sections**: function calls, argument syntax, workspace or authentication details, or monospace fragments can survive from Markdown or script-derived drafting; translate them into methodological prose unless the journal explicitly requires that notation, while allowing only genuinely informative identifiers in Methods

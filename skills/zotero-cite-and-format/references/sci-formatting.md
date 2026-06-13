@@ -12,6 +12,20 @@
 10. Do not let code-style monospace or inline backticks leak into narrative manuscript sections merely because the source text came from Markdown, notebooks, or scripts. Journal-facing prose should read like prose unless the target journal explicitly requires a software or reproducibility notation in the main text. User preference for reproducibility detail should normally be satisfied in Methods supplements, appendices, or separate technical artifacts rather than by making the main narrative read like code.
 11. Do not leave local-environment narration such as "in the current workspace", agent-process notes, temporary paths, or machine-specific statements in manuscript-facing sections such as Data Availability, Methods, footnotes, acknowledgments, or supplements unless the journal explicitly requests them.
 
+## Mandatory DOCX Pass
+
+Run this pass for every Word-facing DOCX that this skill creates or edits.
+
+1. Reopen the final DOCX from disk before checking. Build candidate locations from concatenated paragraph/cell text, then map matched characters back to their Word runs before judging formatting.
+2. Scan body text, tables, headers, footers, footnotes/endnotes, accessible text boxes, and bibliography/reference blocks. Do not limit the scan to edited pages.
+3. Statistical `P` candidates: flag `P=`, `P =`, `P<`, `P <`, `P>`, `P >`, `P≤`, `P ≥`, `P for trend`, `P-value`, `P value`, and `P values`. Exclude initials such as `P.Y.`, abbreviations such as `PRS`, names, titles, and ordinary words. Each statistical `P` character must be in an italic run.
+4. Scientific notation candidates: flag `x 10`, `X 10`, `* 10`, `×10`, `10^-6^`, `10^-6`, `10−6`, `10-6`, `10<sup>-6</sup>`, and any `10` followed by Unicode fake superscript/subscript characters. Final form must use `×` and a separate true superscript exponent run.
+5. Unicode fake-format scan: fail on remaining `⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻⁼⁽⁾₀₁₂₃₄₅₆₇₈₉₊₋₌₍₎` in manuscript-facing DOCX text unless the exact character is intentionally part of a non-formatting identifier and is reported.
+6. Markdown/HTML leakage scan: fail on remaining backticks, `*P*`, `_P_`, `**...**`, `^...^`, `~...~`, `<sup>`, `</sup>`, `<sub>`, or `</sub>` in manuscript-facing prose.
+7. Scan for symbol downgrades: `<=`, `>=`, `+/-`, `x 10`, and hyphen-minus used as a mathematical minus. Use real symbols where appropriate.
+8. Verify by inspecting DOCX XML run properties and by rendering/opening the edited pages. Text extraction alone is not sufficient because superscript may flatten.
+9. Report the pass result explicitly with counts: statistical `P` candidates checked/fixed/remaining, scientific-notation candidates checked/fixed/remaining, Unicode fake-format characters remaining, Markdown/HTML leaks remaining, and whether Word-native/rendered visual verification succeeded.
+
 ## Quick Diagnostic
 
 | Symptom | Likely issue | Fix |

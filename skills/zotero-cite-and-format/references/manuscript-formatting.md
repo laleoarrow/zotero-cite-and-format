@@ -70,31 +70,8 @@ If the journal is silent:
 - default to consolidated figure legends after References
 - default to separate uploaded figure files
 
-## Main Word Tables
-- Use true three-line tables.
-- Omit vertical borders unless the journal explicitly wants them.
-- Keep footnotes outside the bordered table body when that is the chosen style.
-- If the journal is silent, follow the style anchor first; only use a user-stated default when no usable anchor exists.
-- If the marker scheme changes from alphabetic labels to symbols, convert the whole sequence consistently.
-
-## Supplementary Excel Tables
-- Hide worksheet gridlines.
-- Avoid colored Excel themes and filter widgets unless required.
-- Omit vertical borders.
-- Treat each actual table body or panel body as one three-line entity.
-
-Default structure unless the style anchor shows otherwise:
-- caption/title row is outside the bordered table body
-- optional spacer row below the title is outside the bordered table body
-- panel-heading rows such as `A.` / `B.` are outside the bordered table body
-- header row carries the top rule and header-underlining rule
-- final data row carries the closing bottom rule
-- `Footnote:` rows and footnote text rows are outside the bordered table body and do not receive the closing bottom rule
-
-Wrap rules:
-- do not force wrap in title rows, spacer rows, or short footnote-label rows just because merges are narrow
-- use widths and merges that let the title and footnote block read naturally
-- long footnote sentences may wrap naturally in a wide merged row
+## Tables
+For Main Word Tables and Supplementary Excel Tables formatting rules, see `table-formatting.md`.
 
 ## Figures
 - Verify file existence, order, legends, callouts, and panel labels.
