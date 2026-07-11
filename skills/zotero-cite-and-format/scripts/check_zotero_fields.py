@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""
-Minimal structural validator for Zotero live fields in a DOCX.
+"""Strict structural gate for citation-bearing Zotero DOCX manuscripts.
 
-Checks each `ADDIN ZOTERO_ITEM` field for the expected run sequence:
-begin -> instrText -> separate -> visible citation text -> end
+Require at least one live citation field and exactly one live bibliography field.
+Also check each `ADDIN ZOTERO_ITEM` field for the expected run sequence:
+begin -> instrText -> separate -> visible citation text -> end.
 """
 
 from __future__ import annotations
@@ -28,12 +28,17 @@ def main(docx_path: str) -> int:
         root = etree.fromstring(zf.read("word/document.xml"))
 
     bad = []
-    for p_idx, para in enumerate(root.xpath("//w:body/w:p", namespaces=NS), start=1):
+    citation_count = 0
+    bibliography_count = 0
+    for p_idx, para in enumerate(root.xpath("//w:p", namespaces=NS), start=1):
         runs = para.xpath("./w:r", namespaces=NS)
         for i, run in enumerate(runs):
             instr = "".join(run.xpath("./w:instrText/text()", namespaces=NS))
+            if "ADDIN ZOTERO_BIBL" in instr:
+                bibliography_count += 1
             if "ADDIN ZOTERO_ITEM" not in instr:
                 continue
+            citation_count += 1
 
             prev = runs[i - 1] if i - 1 >= 0 else None
             nxt = runs[i + 1] if i + 1 < len(runs) else None
@@ -68,13 +73,30 @@ def main(docx_path: str) -> int:
                     }
                 )
 
+    if citation_count == 0:
+        print("NO_ZOTERO_CITATION_FIELDS")
+        return 1
+
+    if bibliography_count == 0:
+        print("NO_ZOTERO_BIBLIOGRAPHY_FIELD")
+        return 1
+
+    if bibliography_count > 1:
+        print(f"MULTIPLE_ZOTERO_BIBLIOGRAPHY_FIELDS: {bibliography_count}")
+        return 1
+
     if bad:
         print("BROKEN_ZOTERO_FIELDS")
         for item in bad:
             print(item)
         return 1
 
-    print("OK: all Zotero live fields have begin/instr/separate/text/end structure")
+    print(
+        "OK: "
+        f"{citation_count} Zotero citation fields have "
+        "begin/instr/separate/text/end structure; "
+        "1 Zotero bibliography field is present"
+    )
     return 0
 
 

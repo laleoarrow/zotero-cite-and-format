@@ -13,9 +13,10 @@ This is a catalog of real failure modes observed in Zotero + Word manuscript wor
 - **False bibliography alarm**: the reference list looks like ordinary text in Word, but this may simply be the rendered result of a real `ZOTERO_BIBL` field rather than a broken bibliography
 - **Raw Zotero field code leaked into the page**: the DOCX still opens, but Word or rendered PDF shows `ADDIN ZOTERO_ITEM`, `CSL_CITATION`, `zotero.org/groups/...`, or raw citation JSON in body text; this usually means the field cluster lost `begin`, `separate`, or `end` during XML/run surgery
 
-## Export & Static-File Failures
-- **Dropped first reference during static export**: the exporter mishandled the bibliography anchor paragraph and deleted reference `1`
+## Dynamic-Delivery and Package Failures
+- **Dropped first reference in a previously flattened file**: earlier field stripping mishandled the bibliography anchor paragraph and deleted reference `1`; recover or rebuild the dynamic bibliography rather than maintaining a static list
 - **Fake blank gap under `References`**: often a symptom of the same bibliography-anchor bug rather than true paragraph spacing
+- **Static citation copy created as a fallback**: this violates the dynamic-only contract; remove it from the deliverable set, restore the verified live manuscript, and report any submission-system incompatibility as a blocker
 - **Second live manuscript left behind**: an internal rebuild checkpoint was treated as a deliverable instead of being kept under `agents/` or a temporary path
 - **Supplement numbering drift**: the manuscript cites `Supplementary Table S3` or `S4`, but the actual submission package does not yet contain the corresponding `S1/S2/...` deliverables
 
@@ -37,6 +38,6 @@ This is a catalog of real failure modes observed in Zotero + Word manuscript wor
 - **Mechanical citation-parity chasing**: Introduction and Discussion were padded or trimmed just to make citation counts look similar, instead of fixing the real issue of overreviewing in the Introduction or under-contextualized claims in the Discussion
 - **Citation stacking in background claims**: disease-burden or mechanism sentences in the Introduction accumulated 4 to 6 references where 2 to 3 authoritative citations would usually carry the claim more cleanly
 - **Methods package-version clutter**: the manuscript lists document-building or workflow-support packages that were useful locally but are not necessary for the reader to understand or reproduce the scientific analysis
-- **Data Availability mismatch**: references may be technically valid, but the journal-facing submission copy may read better with explicit URLs unless author instructions require citation-style formatting
+- **Data Availability mismatch**: references may be technically valid, but the journal-facing manuscript may read better with explicit URLs unless author instructions require citation-style formatting
 - **Metadata-only Zotero curation**: cited items exist in Zotero but most lack child attachments or child links, so the manuscript workflow is not truly source-complete
 - **Local-workflow prose leakage**: Data Availability or related sections mention the current workspace, local machine paths, or agent-generated process wording

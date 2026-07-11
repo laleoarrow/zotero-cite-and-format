@@ -1,9 +1,9 @@
 ---
 name: zotero-cite-and-format
-description: Use when Word-facing manuscripts need Zotero live-field repair or verification, bibliography refresh/export, review-vs-research formatting routing, table and supplement formatting (Excel/Word), or final package QA.
+description: Use when Word-facing manuscripts need Zotero live-field creation, repair, or verification; dynamic bibliography refresh; review-vs-research formatting routing; table and supplement formatting (Excel/Word); or final package QA. Require every citation-bearing DOCX deliverable to retain dynamic Zotero citation and bibliography fields.
 ---
 
-Related skills: `zotero:Zotero` for library search/import/full text; `academic-editing` for broad prose restructuring. This skill owns Word implementation, live-field safety, export routing, and package QA.
+Related skills: `zotero:Zotero` for library search/import/full text; `academic-editing` for broad prose restructuring. This skill owns Word implementation, dynamic-field safety, and package QA.
 
 # Zotero Cite + Format / Zotero 引文与格式
 
@@ -14,16 +14,20 @@ Do not use it as the primary Zotero library-search or full-text workflow. Route 
 
 ## Core Contract
 - Primary job: keep the manuscript Word-safe, Zotero-live, and journal-ready.
-- Canonical live source is `name_zotero.docx`.
-- Create `name.docx` only when the journal or submission system requires or recommends a static copy, or when the user explicitly asks for one.
-- Leave at most two user-facing manuscript DOCX files and delete temporary or throwaway variants before finishing.
-- Never fake citations, never unlink the canonical live source, and never treat `ADDIN ZOTERO_ITEM` counts alone as proof of correctness.
+- Treat every citation-bearing DOCX as a Zotero-live source regardless of filename. Respect the requested filename; do not require a `_zotero` suffix.
+- Deliver one user-facing manuscript DOCX by default. If the user explicitly requests additional Word variants, retain dynamic Zotero citation and bibliography fields in every variant.
+- Delete temporary or throwaway variants before finishing.
+- Never fake citations, unlink or flatten Zotero fields, deliver a static citation copy, or replace Zotero fields with typed citation numbers or a static reference list.
+- Require an active `ADDIN ZOTERO_ITEM` field for every visible manuscript citation and an active `ADDIN ZOTERO_BIBL` field for every visible Zotero-managed reference list.
+- Never treat field counts alone as proof of correctness.
 - Every Word-facing output must pass the SCI typography rules in `references/sci-formatting.md`: statistical italic `P`, true Word superscript/subscript, scientific notation, real symbols, and no Markdown/code markup leaks.
-- The SCI typography pass is blocking. After the last save, refresh, or export, run it on every delivered DOCX, including the Zotero-live source and any static submission copy. Do not report completion unless unresolved candidates are zero or every remaining candidate is reported with exact file and location.
+- The SCI typography pass is blocking. After the last save or refresh, run it on every delivered DOCX. Do not report completion unless unresolved candidates are zero or every remaining candidate is reported with exact file and location.
 - Keep a visible TODO on multi-step work; append new issues before continuing.
 
 ## Hard Rules
-- Verify official journal instructions before claiming static-copy policy or journal-specific formatting rules.
+- Verify official journal instructions before claiming journal-specific formatting rules.
+- Do not ask whether a static or unlinked manuscript is required; citation storage is fixed to dynamic Zotero fields under this skill.
+- If official journal instructions or a submission system require removal of field codes or reject live fields, report the exact incompatibility as a blocker. Do not create an unlinked or flattened copy.
 - If the journal is silent, use the current task's style anchor, not memory or another project.
 - Verify abstract parity and target-journal word limit.
 - If a manuscript claim does not fit a citation title or abstract, inspect the full text before clearing that citation.
@@ -42,10 +46,10 @@ Do not use it as the primary Zotero library-search or full-text workflow. Route 
 ## Division of Labor
 - `zotero:Zotero` owns library search, item lookup, import, full-text retrieval, BibTeX export, and local Zotero API work.
 - `academic-editing` owns broad prose restructuring and manuscript voice.
-- `zotero-cite-and-format` owns Word live fields, bibliography rendering, static-export routing, manuscript-type formatting, table and supplement formatting, and package-level QA.
+- `zotero-cite-and-format` owns Word live fields, bibliography rendering, manuscript-type formatting, table and supplement formatting, and package-level QA.
 
 ## Route First
-1. Ask only for missing routing facts: target journal and whether the journal or submission path requires a static manuscript.
+1. Ask only for missing routing facts needed for formatting, such as the target journal. Do not create a citation-storage decision branch: all citation-bearing DOCX outputs remain Zotero-live.
 2. Choose one active branch:
 - `Library / Citation Discovery` -> route to `zotero:Zotero`
 - `Live Field / Bibliography` -> read `references/word-zotero-workflow.md`
@@ -58,9 +62,9 @@ Do not use it as the primary Zotero library-search or full-text workflow. Route 
 - `references/official-sources.md` for journal policy or Zotero behavior claims
 - `references/validation-cases.md` for regression comparison
 - `references/failure-modes.md` for abnormal failures or repeated DOCX/Word breakage
-5. Always load `references/sci-formatting.md` before creating, editing, exporting, or verifying a Word-facing manuscript file.
-6. If the journal is unknown or silent, keep only `name_zotero.docx`.
-7. Export `name.docx` only from a verified live source.
+5. Always load `references/sci-formatting.md` before creating, editing, refreshing, or verifying a Word-facing manuscript file.
+6. Keep one user-facing DOCX by default and use the filename requested by the user.
+7. Never export or unlink a static citation copy. If an external submission path cannot accept live fields, stop at a named blocker while preserving the verified dynamic manuscript.
 
 ## Zotero Field Integrity Gate
 Run this gate whenever you insert, repair, clone, or rewrite any live Zotero citation or bibliography field.
@@ -69,7 +73,8 @@ Run this gate whenever you insert, repair, clone, or rewrite any live Zotero cit
 ```bash
 python3 scripts/check_zotero_fields.py /path/to/file.docx
 ```
-- This must pass with `OK: all Zotero live fields have begin/instr/separate/text/end structure`.
+- This must pass with a nonzero Zotero citation-field count, exactly one Zotero bibliography field, and `begin/instr/separate/text/end` structure for every citation field.
+- `NO_ZOTERO_CITATION_FIELDS`, `NO_ZOTERO_BIBLIOGRAPHY_FIELD`, or `MULTIPLE_ZOTERO_BIBLIOGRAPHY_FIELDS` is a hard failure for a citation-bearing manuscript.
 - A nonzero exit means the field cluster is broken even if the DOCX still opens.
 
 2. Rendered-text leak scan:
@@ -102,9 +107,9 @@ Action:
 
 ## Report Back
 Always report:
-- Zotero-editable source file
-- static submission file, if any
-- whether static submission is required, recommended, or silent/not found, with official-source basis and date checked
+- each delivered Zotero-live DOCX file
+- confirmation that every delivered citation-bearing DOCX retains dynamic citation and bibliography fields and that no static or unlinked copy was created
+- any verified journal or submission-system conflict with live fields as a named blocker, with official-source basis and date checked
 - journal-facing formatting changes made
 - SCI typography checks completed, including statistical italic `P`, scientific notation superscripts, real symbols, Markdown/code-markup leaks, and visual/rendered verification
 - whether the Zotero Field Integrity Gate passed, including structural scan, rendered-text leak scan, and page-level visual verification, if live fields were touched

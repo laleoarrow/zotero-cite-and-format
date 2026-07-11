@@ -2,18 +2,18 @@
 
 ### Zotero 引文与格式
 
-`zotero-cite-and-format` 是一个 **Word-facing manuscript skill**。它处理的不是“找文献”本身，而是 **Word 手稿里的 Zotero 活字段、参考文献、期刊格式、导出策略和最终 QA**。
+`zotero-cite-and-format` 是一个 **Word-facing manuscript skill**。它处理的不是“找文献”本身，而是 **Word 手稿里的 Zotero 动态字段、参考文献、期刊格式和最终 QA**。
 
-它的核心目标只有一个：**把手稿保持为可继续用 Zotero 编辑、能按期刊要求导出、且在 Word 里稳定工作的规范稿件。**
+它的核心目标只有一个：**让所有含引文的 Word 交付稿始终保留 Zotero 动态 citation 与 bibliography fields，并在 Word 里稳定工作。**
 
 ## 它负责什么
 
 - 修复或核对 Zotero live fields
 - 刷新或重建 bibliography
-- 区分 `Zotero 可编辑稿` 与 `投稿静态稿`
+- 确保每个含引文的 DOCX 都保留可刷新的 Zotero 动态字段
 - 根据 review / research 手稿类型路由不同格式规则
 - 在标题页、摘要、表格、图注、补充材料、符号和 Word run-level 细节上做期刊向格式控制
-- 在 repeated corruption、unreadable content、导出后 ref1 丢失等场景下执行 package-level QA
+- 在 repeated corruption、unreadable content、字段修复后 ref1 丢失等场景下执行 package-level QA
 
 ## 它不负责什么
 
@@ -28,21 +28,20 @@
 
 ## 核心约束
 
-- 规范源稿永远是 `name_zotero.docx`
-- `name.docx` 只在期刊/投稿系统要求或用户明确要求时才创建
-- 用户可见的 manuscript DOCX 最多保留两份
+- 每个含引文的 DOCX 都是 Zotero-live source；文件名不决定字段类型，也不强制使用 `_zotero` 后缀
+- 默认只交付一个用户可见 DOCX；若用户明确要求多个 Word 版本，每个版本都必须保留动态 citation 与 bibliography fields
 - 完成后删除临时文件、throwaway 变体和 recovery 副本
 - 绝不伪造 Zotero citation
-- 绝不 unlink 规范源稿
+- 绝不 unlink、flatten 或交付静态 citation/reference copy
 - 绝不把 `ADDIN ZOTERO_ITEM` 计数当作完整验证
 
 ## 处理顺序
 
 1. 先分清任务类型：
    `Library / Citation Discovery`、`Live Field / Bibliography`、`Review Manuscript Formatting`、`Research Manuscript Formatting`、`Package Final Gate`
-2. 先修好或确认 `name_zotero.docx`
+2. 先修好或确认用户指定的 Zotero-live DOCX
 3. 再做 Word-facing formatting
-4. 确有需要时才导出 static copy
+4. 若期刊或投稿系统要求移除字段，只报告明确冲突，不创建静态副本
 5. 最后做 package QA，并清理临时文件
 
 ## 重灾区
@@ -59,7 +58,7 @@
 ## references/ 分工
 
 - `word-zotero-workflow.md`
-  live-field repair、bibliography rebuild、refresh failure、static export
+  live-field creation/repair、dynamic bibliography rebuild、refresh failure、dynamic-only delivery
 - `manuscript-formatting.md`
   title page、abstract、prose block、table、legend、supplement、spacing
 - `review-manuscripts.md`

@@ -2,7 +2,7 @@
 
 1. Use real Word character formatting for superscript, subscript, italic, bold, and small caps. Do not fake these with Unicode look-alike glyphs.
 2. For scientific notation, prefer `a × 10^n` with a real multiplication sign `×` and a truly superscripted exponent. In Word terms, the exponent should be plain text in its own run with superscript formatting applied, not a pasted Unicode form such as `10⁻3`.
-3. Do not let Markdown notation leak into the manuscript-facing Word files. Syntax such as `10^-6^`, `H~2~O`, backticks, or similar source markup is not acceptable in either the Zotero-editable manuscript or the static submission copy.
+3. Do not let Markdown notation leak into manuscript-facing Word files. Syntax such as `10^-6^`, `H~2~O`, backticks, or similar source markup is not acceptable in any delivered Zotero-live DOCX.
 4. Do not normalize hyphen, minus, en dash, and em dash blindly. Preserve one role per symbol and keep the manuscript's convention consistent unless the target journal explicitly wants a different style.
 5. Use true italic formatting for material that field convention marks as italic, such as Latin species names or other biologic labels that genuinely require italics. Do not replace italics with styled Unicode characters.
 6. Use real symbol characters when the symbol itself carries meaning, such as Greek letters, `≤`, `≥`, `±`, and `×`. Do not silently downgrade them to plain-text approximations unless the journal or submission system requires it.

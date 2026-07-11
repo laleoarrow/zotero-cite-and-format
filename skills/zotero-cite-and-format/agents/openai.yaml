@@ -1,4 +1,4 @@
 interface:
   display_name: "Zotero Cite + Format"
-  short_description: "Word-safe Zotero repair, formatting, and submission QA"
-  default_prompt: "Use $zotero-cite-and-format to repair Zotero live fields in this Word manuscript, verify formatting, and run final submission QA."
+  short_description: "Dynamic Zotero fields, formatting, and submission QA"
+  default_prompt: "Use $zotero-cite-and-format to keep every citation and bibliography field dynamic in this Word manuscript, verify formatting, and run final submission QA."

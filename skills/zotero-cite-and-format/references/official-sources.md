@@ -41,10 +41,10 @@ Use these sources before making any operational claim that affects a manuscript,
 
 Operational rules grounded in the official Zotero support pages above:
 
-- Editable Word source documents should normally store citations as `Fields`; Zotero explicitly says to use `Bookmarks` only when Word/LibreOffice compatibility is actually needed.
+- Store citations as Word `Fields` in every citation-bearing DOCX handled by this skill. Do not route to Zotero `Bookmarks`, because the dynamic-field integrity gate requires native Word field structures.
 - If citation output is wrong, fix the Zotero item metadata first and then use `Refresh`; do not hand-edit the live bibliography in the Zotero source document and assume it will stay correct.
-- `Unlink Citations` is irreversible and belongs on a final copy only, not on the Zotero-editable source manuscript.
-- Opening a Word or LibreOffice manuscript in another processor without Zotero's conversion workflow can break active citations; use Zotero's documented transfer steps or explicit interoperability mode instead of ad hoc opening/saving.
+- `Unlink Citations` is irreversible. This skill never runs it and never delivers an unlinked or flattened citation copy.
+- Opening a Word or LibreOffice manuscript in another processor without Zotero's conversion workflow can break active citations. If transfer is unavoidable, use Zotero's documented transfer steps, then restore native Word `Fields` before this skill verifies or delivers the DOCX.
 
 ## Zotero official Word integration repositories
 
@@ -115,10 +115,10 @@ Major official entry points by publisher and platform (checked 2026-04-02):
 
 Publisher- or journal-specific examples relevant to citation-manager behavior:
 
-- Elsevier explicitly advises authors using citation plug-ins to remove field codes before submission. Verified example: American Journal of Ophthalmology Guide for Authors, reference management section.  
+- Elsevier explicitly advises authors using citation plug-ins to remove field codes before submission. Verified example: American Journal of Ophthalmology Guide for Authors, reference management section. Under this skill's dynamic-only contract, treat that instruction as a submission blocker and preserve the Zotero-live manuscript; do not branch to a static export.
   https://www.sciencedirect.com/journal/american-journal-of-ophthalmology/publish/guide-for-authors
 
 - MDPI journal instructions commonly state that bibliography software such as EndNote, Zotero, Mendeley, and Reference Manager is acceptable, while later-stage formatting must still follow the journal instructions. Verified example journal page:  
   https://www.mdpi.com/journal/J/instructions
 
-This matters because some journals explicitly instruct authors to remove field codes before submission, while others accept reference-manager-generated manuscripts provided that the final file complies with journal-specific formatting and submission requirements.
+This matters because a journal instruction to remove field codes conflicts with this skill's dynamic-only deliverable contract. Report the conflict precisely, retain the verified Zotero-live DOCX, and do not generate an unlinked fallback.
